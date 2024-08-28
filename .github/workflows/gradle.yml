@@ -36,5 +36,5 @@ jobs:
       run: chmod +x crypto-exchange/gradlew
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      run: ./gradlew build sonar --info
       working-directory: crypto-exchange
