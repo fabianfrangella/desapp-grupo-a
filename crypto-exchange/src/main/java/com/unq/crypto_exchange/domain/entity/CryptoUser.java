@@ -1,10 +1,7 @@
 package com.unq.crypto_exchange.domain.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -26,6 +23,7 @@ public class CryptoUser {
     @Size(min = 3, max = 30)
     private String lastName;
     @NonNull
+    @Column(unique = true)
     @Pattern(regexp=".+@.+\\.[a-z]+", message="Invalid email address!")
     private String email;
     @NonNull
