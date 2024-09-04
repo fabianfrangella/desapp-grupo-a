@@ -5,13 +5,11 @@ import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -35,6 +33,18 @@ public class RegisterUserDTO {
     @NotNull
     @Size(min = 8, max = 8, message = "Crypto Wallet Address must be 8 characters long")
     String cryptoWalletAddress;
+
+    public static RegisterUserDTO fromModel(CryptoUser user) {
+        return RegisterUserDTO
+                .builder()
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .cvu(user.getCvu())
+                .cryptoWalletAddress(user.getCryptoWalletAddress())
+                .build();
+    }
 
     public CryptoUser toModel() {
         return CryptoUser.builder()

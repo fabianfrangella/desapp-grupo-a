@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterUserDTO> register(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
-        userService.register(registerUserDTO.toModel());
-        return new ResponseEntity<>(registerUserDTO, HttpStatus.CREATED);
+        var user = userService.register(registerUserDTO.toModel());
+        return new ResponseEntity<>(RegisterUserDTO.fromModel(user), HttpStatus.CREATED);
     }
 }
