@@ -5,6 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class PasswordEncoderFactory {
 
+    private PasswordEncoderFactory() {};
+
     public static PasswordEncoder getDefaultEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }

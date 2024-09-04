@@ -18,7 +18,7 @@ public class UserService {
 
     public CryptoUser register(CryptoUser user) {
         var maybeUser = userRepository.findByEmail(user.getEmail());
-        maybeUser.ifPresent((existentUser) -> {
+        maybeUser.ifPresent(existentUser -> {
             logger.info("User email {} already exists", user.getEmail());
             throw new UserAlreadyExistException(user.getEmail());
         });
