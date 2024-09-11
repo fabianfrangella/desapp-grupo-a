@@ -33,6 +33,7 @@ sonar {
 		property "sonar.host.url", "https://sonarcloud.io"
 		property "sonar.junit.reportPaths", "build/test-results/test"
 		property "sonar.jacoco.reportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+		property "sonar.coverage.exclusions", "src/**/**/api/*, src/**/**/security/*"
 	}
 }
 
