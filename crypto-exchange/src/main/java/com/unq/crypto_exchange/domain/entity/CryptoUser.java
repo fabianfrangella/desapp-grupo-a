@@ -14,11 +14,10 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class CryptoUser {
+public class CryptoUser extends PersistentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NonNull
     @Size(min = 3, max = 30)
     private String name;

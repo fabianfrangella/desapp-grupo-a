@@ -5,30 +5,29 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+@Entity
 @Getter
 @Setter
 @Builder
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction extends PersistentEntity {
+public class TradingIntention extends PersistentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull
-    private CryptoCurrencyType cryptoCurrency;
-    @NonNull
+    private CryptoCurrencyType cryptoCurrencyType;
     private Long quantity;
-    @NonNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "price_id")
     private CryptoPrice price;
-    @NonNull
     private BigDecimal amount;
-    @NonNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private CryptoUser user;
-    @NonNull
     private OperationType operationType;
+    private Status status;
+
+    enum Status {
+        ACTIVE, INACTIVE
+    }
 }
