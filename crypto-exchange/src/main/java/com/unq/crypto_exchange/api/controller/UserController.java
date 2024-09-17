@@ -1,6 +1,7 @@
 package com.unq.crypto_exchange.api.controller;
 
 import com.unq.crypto_exchange.api.dto.RegisterUserDTO;
+import com.unq.crypto_exchange.api.dto.RegisterUserResponseDTO;
 import com.unq.crypto_exchange.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterUserDTO> register(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
+    public ResponseEntity<RegisterUserResponseDTO> register(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
         var user = userService.register(registerUserDTO.toModel());
-        return new ResponseEntity<>(RegisterUserDTO.fromModel(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(RegisterUserResponseDTO.fromModel(user), HttpStatus.CREATED);
     }
 }
