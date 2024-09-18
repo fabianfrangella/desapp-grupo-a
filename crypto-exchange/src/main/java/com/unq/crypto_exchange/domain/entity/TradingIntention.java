@@ -2,6 +2,7 @@ package com.unq.crypto_exchange.domain.entity;
 
 import com.unq.crypto_exchange.domain.entity.exception.IllegalCancelOperationException;
 import com.unq.crypto_exchange.domain.entity.exception.InactiveTradingIntentionException;
+import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import jakarta.persistence.*;
 import lombok.*;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class TradingIntention extends EntityMetaData {
     private OperationType operationType;
     private Status status;
 
-    enum Status {
+    public enum Status {
         ACTIVE, INACTIVE
     }
 

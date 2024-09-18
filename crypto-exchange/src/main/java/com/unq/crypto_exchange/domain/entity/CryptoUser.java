@@ -2,6 +2,10 @@ package com.unq.crypto_exchange.domain.entity;
 
 
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
+import com.unq.crypto_exchange.domain.entity.transaction.strategy.BuyerUserStrategy;
+import com.unq.crypto_exchange.domain.entity.transaction.strategy.SellerUserStrategy;
+import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
+import com.unq.crypto_exchange.domain.entity.transaction.strategy.TransactionStrategy;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

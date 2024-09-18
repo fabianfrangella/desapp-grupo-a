@@ -1,5 +1,6 @@
-package com.unq.crypto_exchange.domain.entity;
+package com.unq.crypto_exchange.domain.entity.transaction;
 
+import com.unq.crypto_exchange.domain.entity.*;
 import jakarta.persistence.*;
 import lombok.*;
 

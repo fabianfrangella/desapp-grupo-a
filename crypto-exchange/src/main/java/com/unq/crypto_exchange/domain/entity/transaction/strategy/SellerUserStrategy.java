@@ -1,4 +1,7 @@
-package com.unq.crypto_exchange.domain.entity;
+package com.unq.crypto_exchange.domain.entity.transaction.strategy;
+
+import com.unq.crypto_exchange.domain.entity.CryptoUser;
+import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 
 public class SellerUserStrategy extends CommonTransactionStrategy implements TransactionStrategy {
     @Override
