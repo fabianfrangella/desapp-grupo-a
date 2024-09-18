@@ -24,4 +24,5 @@ public class TradingIntentionController {
                         HttpStatus.CREATED
         );
     }
+
 }
