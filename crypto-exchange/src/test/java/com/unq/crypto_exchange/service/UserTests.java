@@ -2,6 +2,7 @@ package com.unq.crypto_exchange.service;
 
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.repository.UserRepository;
+import com.unq.crypto_exchange.service.exception.UserAlreadyExistException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;

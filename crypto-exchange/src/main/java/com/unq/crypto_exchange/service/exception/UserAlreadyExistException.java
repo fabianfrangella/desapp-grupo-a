@@ -1,4 +1,4 @@
-package com.unq.crypto_exchange.service;
+package com.unq.crypto_exchange.service.exception;
 
 public class UserAlreadyExistException extends RuntimeException {
     public UserAlreadyExistException(String email) {

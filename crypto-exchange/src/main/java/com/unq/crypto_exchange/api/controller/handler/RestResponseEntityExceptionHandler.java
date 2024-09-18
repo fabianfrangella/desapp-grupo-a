@@ -1,6 +1,7 @@
 package com.unq.crypto_exchange.api.controller.handler;
 
-import com.unq.crypto_exchange.service.UserAlreadyExistException;
+import com.unq.crypto_exchange.service.exception.UserAlreadyExistException;
+import com.unq.crypto_exchange.service.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,13 @@ public class RestResponseEntityExceptionHandler
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ErrorBody(HttpStatus.CONFLICT.value(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(value = { UserNotFoundException.class })
+    protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorBody(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
     }
 
     @Override

@@ -63,9 +63,10 @@ public class CryptoUser extends EntityMetaData {
     @Transient
     private TransactionStrategy transactionStrategy;
 
-    public TradingIntention makeIntention(TradingIntention intention) {
+    public TradingIntention makeIntention(TradingIntention intention, CryptoPrice cryptoPrice) {
         intention.setUser(this);
         intention.setStatus(TradingIntention.Status.ACTIVE);
+        intention.setPrice(cryptoPrice);
         intentions.add(intention);
         return intention;
     }
