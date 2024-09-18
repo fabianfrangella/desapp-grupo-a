@@ -1,5 +1,6 @@
 package com.unq.crypto_exchange.api.controller.handler;
 
+import com.unq.crypto_exchange.service.exception.PriceNotFoundException;
 import com.unq.crypto_exchange.service.exception.UserAlreadyExistException;
 import com.unq.crypto_exchange.service.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -25,8 +26,8 @@ public class RestResponseEntityExceptionHandler
                 .body(new ErrorBody(HttpStatus.CONFLICT.value(), ex.getMessage()));
     }
 
-    @ExceptionHandler(value = { UserNotFoundException.class })
-    protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(value = { UserNotFoundException.class, PriceNotFoundException.class})
+    protected ResponseEntity<Object> handleNotFoundExceptions(RuntimeException ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorBody(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
