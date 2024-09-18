@@ -11,10 +11,7 @@ import java.math.BigDecimal;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction extends PersistentEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Transaction extends EntityMetaData {
     @NonNull
     private CryptoCurrencyType cryptoCurrency;
     @NonNull

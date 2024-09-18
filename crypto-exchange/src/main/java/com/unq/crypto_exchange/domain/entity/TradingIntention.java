@@ -11,10 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TradingIntention extends PersistentEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class TradingIntention extends EntityMetaData {
     private CryptoCurrencyType cryptoCurrencyType;
     private Long quantity;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
