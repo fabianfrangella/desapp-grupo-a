@@ -32,5 +32,7 @@ public class Transaction extends EntityMetaData {
     private CryptoUser buyer;
     @NonNull
     private OperationType operationType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trading_intention_id")
     private TradingIntention tradingIntention;
 }

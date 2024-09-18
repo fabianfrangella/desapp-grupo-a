@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class TradingIntention extends EntityMetaData {
 
-    private static final Logger logger = LoggerFactory.getLogger(TradingIntention.class);
     private CryptoCurrencyType cryptoCurrencyType;
     private Long quantity;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
