@@ -4,6 +4,7 @@ import com.unq.crypto_exchange.domain.builder.CryptoUserBuilder;
 import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoPrice;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
+import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,14 @@ public class CryptoUserTest {
         user.cancelIntention(1L);
 
         Mockito.verify(intention, Mockito.times(1)).setStatus(TradingIntention.Status.INACTIVE);
+    }
+
+    @Test
+    public void whenCancelNotExistentIntentionShouldThrowException() {
+        var user = CryptoUserBuilder.defaultCryptoUser();
+
+        Assertions.assertThrows(NoSuchTradingIntentionException.class, () -> user.cancelIntention(1L));
+
     }
 
     @Test
