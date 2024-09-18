@@ -24,8 +24,12 @@ public class Transaction extends EntityMetaData {
     private BigDecimal amount;
     @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private CryptoUser user;
+    @JoinColumn(name = "seller_user_id")
+    private CryptoUser seller;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_user_id")
+    private CryptoUser buyer;
     @NonNull
     private OperationType operationType;
+    private TradingIntention tradingIntention;
 }
