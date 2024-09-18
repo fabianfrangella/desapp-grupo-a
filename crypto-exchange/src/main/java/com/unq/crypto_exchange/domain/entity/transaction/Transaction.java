@@ -35,4 +35,20 @@ public class Transaction extends EntityMetaData {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trading_intention_id")
     private TradingIntention tradingIntention;
+
+    private TransactionStatus status = TransactionStatus.PENDING;
+
+    public void confirm() {
+        this.status = TransactionStatus.COMPLETED;
+    }
+
+    public void cancel() {
+        this.status = TransactionStatus.CANCELED;
+    }
+
+    public enum TransactionStatus {
+        COMPLETED,
+        PENDING,
+        CANCELED
+    }
 }

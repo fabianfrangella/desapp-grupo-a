@@ -1,12 +1,11 @@
 package com.unq.crypto_exchange.domain.entity;
 
 import com.unq.crypto_exchange.domain.entity.exception.IllegalCancelOperationException;
+import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException;
 import com.unq.crypto_exchange.domain.entity.exception.InactiveTradingIntentionException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import jakarta.persistence.*;
 import lombok.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 
@@ -34,17 +33,18 @@ public class TradingIntention extends EntityMetaData {
         ACTIVE, INACTIVE
     }
 
-    public void doTransaction(CryptoUser requestUser) {
+    public Transaction doTransaction(CryptoUser requestUser) {
+        if (user.getId().equals(requestUser.getId())) throw new IllegalOperationException("Buyer and Seller user must be different");
         if (status == Status.INACTIVE) throw new InactiveTradingIntentionException("The TradingIntention is Inactive");
         if (operationType == OperationType.CANCEL && !requestUser.equals(user)) {
             throw new IllegalCancelOperationException("Only the System or the owner of the TradingIntention can cancel it");
         }
         if (operationType == OperationType.CANCEL) {
             user.doCancelPenalty();
-            return;
+            return null;
         }
         if (operationType == OperationType.SYSTEM_CANCEL) {
-            return;
+            return null;
         }
 
         var buyerUser = operationType == OperationType.PURCHASE ? user : requestUser;
@@ -59,8 +59,10 @@ public class TradingIntention extends EntityMetaData {
                 .operationType(operationType)
                 .quantity(quantity)
                 .cryptoCurrency(cryptoCurrencyType)
+                .status(Transaction.TransactionStatus.PENDING)
                 .build();
 
-        requestUser.doTransaction(transaction);
+        status = Status.INACTIVE;
+        return requestUser.doTransaction(transaction);
     }
 }
