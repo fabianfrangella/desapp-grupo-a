@@ -34,7 +34,6 @@ public class TradingIntention extends EntityMetaData {
     }
 
     public Transaction doTransaction(CryptoUser requestUser) {
-        if (user.getId().equals(requestUser.getId())) throw new IllegalOperationException("Buyer and Seller user must be different");
         if (status == Status.INACTIVE) throw new InactiveTradingIntentionException("The TradingIntention is Inactive");
         if (operationType == OperationType.CANCEL && !requestUser.equals(user)) {
             throw new IllegalCancelOperationException("Only the System or the owner of the TradingIntention can cancel it");
@@ -43,6 +42,7 @@ public class TradingIntention extends EntityMetaData {
             user.doCancelPenalty();
             return null;
         }
+        if (user.getId().equals(requestUser.getId())) throw new IllegalOperationException("Buyer and Seller user must be different");
         if (operationType == OperationType.SYSTEM_CANCEL) {
             return null;
         }
