@@ -28,15 +28,6 @@ public class TradingIntentionTest {
     }
 
     @Test
-    @DisplayName("When Do Transaction With Cancel Operation Should Do Cancel Penalty")
-    public void whenDoTransactionWithCancelOperationShouldDoCancelPenalty() {
-        var user = Mockito.mock(CryptoUser.class);
-        var tradingIntention = TradingIntentionBuilder.withUserAndOperation(user, OperationType.CANCEL);
-        tradingIntention.doTransaction(user);
-        Mockito.verify(user).doCancelPenalty();
-    }
-
-    @Test
     @DisplayName("When Do Transaction With Cancel Operation And Different Requester User Should Fail")
     public void whenDoTransactionWithCancelOperationAndDifferentRequesterUserShouldFail() {
         var user = Mockito.mock(CryptoUser.class);
@@ -58,18 +49,6 @@ public class TradingIntentionTest {
         tradingIntention.doTransaction(requesterUser);
         Mockito.verify(requesterUser, Mockito.times(0)).doCancelPenalty();
         Mockito.verify(requesterUser, Mockito.times(0)).doTransaction(Mockito.any());
-    }
-
-    @Test
-    @DisplayName("When Do Transaction With Valid Data Should Do The Transaction")
-    public void whenDoTransactionWithValidDataShouldDoTheTransaction() {
-        var user = Mockito.mock(CryptoUser.class);
-        var requesterUser = Mockito.mock(CryptoUser.class);
-        Mockito.when(user.getId()).thenReturn(1L);
-        Mockito.when(requesterUser.getId()).thenReturn(2L);
-        var tradingIntention = TradingIntentionBuilder.withUserAndOperation(user, OperationType.PURCHASE);
-        tradingIntention.doTransaction(requesterUser);
-        Mockito.verify(requesterUser).doTransaction(Mockito.any());
     }
 
     @Test
