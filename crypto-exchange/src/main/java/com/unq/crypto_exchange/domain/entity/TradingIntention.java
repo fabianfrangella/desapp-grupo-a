@@ -46,7 +46,7 @@ public class TradingIntention extends EntityMetaData {
         var buyerUser = operationType == OperationType.PURCHASE ? user : requestUser;
         var sellerUser = operationType == OperationType.SALE ? user : requestUser;
 
-        var transaction = Transaction.builder()
+        return Transaction.builder()
                 .tradingIntention(this)
                 .amount(amount)
                 .price(price)
@@ -57,8 +57,5 @@ public class TradingIntention extends EntityMetaData {
                 .cryptoCurrency(cryptoCurrencyType)
                 .status(Transaction.TransactionStatus.PENDING)
                 .build();
-
-        status = Status.INACTIVE;
-        return transaction;
     }
 }

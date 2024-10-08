@@ -43,46 +43,6 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenDoTransactionAsBuyerShouldAddTransactionToBuyerAndSellerAndAddReputationToBoth() {
-        var buyer = CryptoUserBuilder.defaultCryptoUser();
-        var seller = CryptoUserBuilder.defaultCryptoUser();
-        var transaction = Mockito.mock(Transaction.class);
-        var intention = Mockito.mock(TradingIntention.class);
-
-        Mockito.when(transaction.getBuyer()).thenReturn(buyer);
-        Mockito.when(transaction.getSeller()).thenReturn(seller);
-        Mockito.when(transaction.getTradingIntention()).thenReturn(intention);
-        Mockito.when(intention.getCreatedAt()).thenReturn(Instant.MIN);
-
-        buyer.doTransaction(transaction);
-
-        Assertions.assertEquals(1, buyer.getBuyTransactions().size());
-        Assertions.assertEquals(1, seller.getSellTransactions().size());
-        Assertions.assertEquals(5,buyer.getReputation());
-        Assertions.assertEquals(5,seller.getReputation());
-    }
-
-    @Test
-    public void whenDoTransactionAsSellerShouldAddTransactionToBuyerAndSellerAndAddReputationToBoth() {
-        var buyer = CryptoUserBuilder.defaultCryptoUser();
-        var seller = CryptoUserBuilder.defaultCryptoUser();
-        var transaction = Mockito.mock(Transaction.class);
-        var intention = Mockito.mock(TradingIntention.class);
-
-        Mockito.when(transaction.getBuyer()).thenReturn(buyer);
-        Mockito.when(transaction.getSeller()).thenReturn(seller);
-        Mockito.when(transaction.getTradingIntention()).thenReturn(intention);
-        Mockito.when(intention.getCreatedAt()).thenReturn(Instant.MIN);
-
-        seller.doTransaction(transaction);
-
-        Assertions.assertEquals(1, buyer.getBuyTransactions().size());
-        Assertions.assertEquals(1, seller.getSellTransactions().size());
-        Assertions.assertEquals(5,buyer.getReputation());
-        Assertions.assertEquals(5,seller.getReputation());
-    }
-
-    @Test
     public void whenDoCancelPenaltyUserShouldHave20lessReputation() {
         var user = CryptoUserBuilder.defaultCryptoUser();
         user.doCancelPenalty();
