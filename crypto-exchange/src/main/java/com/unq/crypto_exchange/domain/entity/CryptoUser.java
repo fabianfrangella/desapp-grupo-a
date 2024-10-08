@@ -2,14 +2,16 @@ package com.unq.crypto_exchange.domain.entity;
 
 
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
+import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import com.unq.crypto_exchange.domain.entity.transaction.strategy.BuyerUserStrategy;
 import com.unq.crypto_exchange.domain.entity.transaction.strategy.SellerUserStrategy;
-import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import com.unq.crypto_exchange.domain.entity.transaction.strategy.TransactionStrategy;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,6 +62,10 @@ public class CryptoUser extends EntityMetaData {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TradingIntention> intentions = new HashSet<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CryptoActive> cryptoActives = new HashSet<>();
+
     @Transient
     private TransactionStrategy transactionStrategy;
 
@@ -79,22 +85,33 @@ public class CryptoUser extends EntityMetaData {
         return intention;
     }
 
-    public Transaction doTransaction(Transaction transaction) {
+    public void doTransaction(Transaction transaction) {
         if (transaction.getBuyer().equals(this)) {
             transactionStrategy = new BuyerUserStrategy();
         } else {
             transactionStrategy = new SellerUserStrategy();
         }
         transactionStrategy.doTransaction(this, transaction);
-        return transaction;
     }
 
     public void addBuyTransaction(Transaction transaction) {
         buyTransactions.add(transaction);
+        if (cryptoActives.stream().anyMatch(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency()))) {
+            var maybeCrypto = cryptoActives.stream().filter(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency())).findFirst();
+            maybeCrypto.ifPresent((crypto) -> {
+                crypto.addQuantity(transaction.getQuantity());
+            });
+        }
     }
 
     public void addSellTransaction(Transaction transaction) {
         sellTransactions.add(transaction);
+        if (cryptoActives.stream().anyMatch(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency()))) {
+            var maybeCrypto = cryptoActives.stream().filter(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency())).findFirst();
+            maybeCrypto.ifPresent((crypto) -> {
+                crypto.removeQuantity(transaction.getQuantity());
+            });
+        }
     }
 
     public void doCancelPenalty() {
@@ -103,6 +120,17 @@ public class CryptoUser extends EntityMetaData {
 
     public void addReputation(Integer reputation) {
         this.reputation+= reputation;
+    }
+
+    public void fillInitialWallet() {
+        Arrays.stream(CryptoCurrencyType.values()).forEach(type -> {
+            var cryptoActive = new CryptoActive();
+            cryptoActive.setUser(this);
+            cryptoActive.setQuantity(0L);
+            cryptoActive.setType(type);
+
+            cryptoActives.add(cryptoActive);
+        });
     }
 
 }

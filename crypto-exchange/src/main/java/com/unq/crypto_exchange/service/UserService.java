@@ -25,6 +25,7 @@ public class UserService {
         });
         var encryptedPassword = PasswordEncoderFactory.getDefaultEncoder().encode(user.getPassword());
         user.setPassword(encryptedPassword);
+        user.fillInitialWallet();
         userRepository.save(user);
         return user;
     }

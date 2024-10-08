@@ -13,6 +13,7 @@ public class CommonTransactionStrategy implements TransactionStrategy {
         if (Instant.now().isBefore(transaction.getTradingIntention().getCreatedAt().plus(30, ChronoUnit.MINUTES))) {
             reputation = 10;
         }
+        transaction.confirm();
         transaction.getBuyer().addReputation(reputation);
         transaction.getSeller().addReputation(reputation);
     }

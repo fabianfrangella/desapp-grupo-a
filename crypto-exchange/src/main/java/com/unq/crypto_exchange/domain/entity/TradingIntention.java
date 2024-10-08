@@ -38,10 +38,6 @@ public class TradingIntention extends EntityMetaData {
         if (operationType == OperationType.CANCEL && !requestUser.equals(user)) {
             throw new IllegalCancelOperationException("Only the System or the owner of the TradingIntention can cancel it");
         }
-        if (operationType == OperationType.CANCEL) {
-            user.doCancelPenalty();
-            return null;
-        }
         if (user.getId().equals(requestUser.getId())) throw new IllegalOperationException("Buyer and Seller user must be different");
         if (operationType == OperationType.SYSTEM_CANCEL) {
             return null;
@@ -63,6 +59,6 @@ public class TradingIntention extends EntityMetaData {
                 .build();
 
         status = Status.INACTIVE;
-        return requestUser.doTransaction(transaction);
+        return transaction;
     }
 }

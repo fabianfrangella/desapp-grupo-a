@@ -7,7 +7,7 @@ public class BuyerUserStrategy extends CommonTransactionStrategy implements Tran
     @Override
     public void doTransaction(CryptoUser user, Transaction transaction) {
         super.doTransaction(user, transaction);
-        user.addBuyTransaction(transaction);
+        transaction.getBuyer().addBuyTransaction(transaction);
         transaction.getSeller().addSellTransaction(transaction);
     }
 }
