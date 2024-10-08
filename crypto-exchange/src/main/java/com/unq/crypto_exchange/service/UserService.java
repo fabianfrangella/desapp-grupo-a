@@ -3,6 +3,7 @@ package com.unq.crypto_exchange.service;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.repository.UserRepository;
 import com.unq.crypto_exchange.security.PasswordEncoderFactory;
+import com.unq.crypto_exchange.service.exception.UserAlreadyExistException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ public class UserService {
         });
         var encryptedPassword = PasswordEncoderFactory.getDefaultEncoder().encode(user.getPassword());
         user.setPassword(encryptedPassword);
+        user.fillInitialWallet();
         userRepository.save(user);
         return user;
     }
