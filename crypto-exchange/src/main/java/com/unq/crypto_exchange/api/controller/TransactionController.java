@@ -1,6 +1,6 @@
 package com.unq.crypto_exchange.api.controller;
 
-import com.unq.crypto_exchange.api.dto.TransactionAction;
+import com.unq.crypto_exchange.domain.entity.transaction.TransactionAction;
 import com.unq.crypto_exchange.api.dto.TransactionResponseDTO;
 import com.unq.crypto_exchange.service.TransactionService;
 import lombok.AllArgsConstructor;

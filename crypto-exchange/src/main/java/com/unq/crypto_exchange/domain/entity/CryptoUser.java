@@ -11,6 +11,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -83,15 +85,6 @@ public class CryptoUser extends EntityMetaData {
                 .findFirst().orElseThrow(() -> new NoSuchTradingIntentionException("There is no TradingIntention with ID: " + intentionId));
         intention.setStatus(TradingIntention.Status.INACTIVE);
         return intention;
-    }
-
-    public void doTransaction(Transaction transaction) {
-        if (transaction.getBuyer().equals(this)) {
-            transactionStrategy = new BuyerUserStrategy();
-        } else {
-            transactionStrategy = new SellerUserStrategy();
-        }
-        transactionStrategy.doTransaction(this, transaction);
     }
 
     public void addBuyTransaction(Transaction transaction) {
