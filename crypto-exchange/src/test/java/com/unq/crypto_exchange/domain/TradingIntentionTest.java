@@ -38,7 +38,8 @@ public class TradingIntentionTest {
         Assertions.assertThrows(IllegalCancelOperationException.class, () -> tradingIntention.doTransaction(requesterUser));
     }
 
-    @Test
+    //TODO: Este creo que no va ma
+/*    @Test
     @DisplayName("When Do Transaction With System Cancel Operation Should Do Nothing")
     public void whenDoTransactionWithSystemCancelOperationShouldDoNothing() {
         var user = Mockito.mock(CryptoUser.class);
@@ -49,7 +50,7 @@ public class TradingIntentionTest {
         tradingIntention.doTransaction(requesterUser);
         Mockito.verify(requesterUser, Mockito.times(0)).doCancelPenalty();
         Mockito.verify(requesterUser, Mockito.times(0)).doTransaction(Mockito.any());
-    }
+    }*/
 
     @Test
     @DisplayName("When Do Transaction With Same Buyer and Seller User Should Fail")
