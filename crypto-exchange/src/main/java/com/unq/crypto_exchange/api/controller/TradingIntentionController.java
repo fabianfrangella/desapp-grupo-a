@@ -2,11 +2,14 @@ package com.unq.crypto_exchange.api.controller;
 
 import com.unq.crypto_exchange.api.dto.TradingIntentionDTO;
 import com.unq.crypto_exchange.api.dto.TradingIntentionResponseDTO;
+import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.service.TradingIntentionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -25,4 +28,12 @@ public class TradingIntentionController {
         );
     }
 
+    @GetMapping("/find")
+    public ResponseEntity<List<TradingIntentionResponseDTO>> find() {
+        return new ResponseEntity<>(
+                TradingIntentionResponseDTO.fromModel(
+                        tradingIntentionService.find()),
+                HttpStatus.OK
+        );
+    }
 }
