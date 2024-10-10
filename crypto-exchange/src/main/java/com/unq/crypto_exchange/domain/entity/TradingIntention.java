@@ -50,7 +50,11 @@ public class TradingIntention extends EntityMetaData {
         var buyerUser = operationType == OperationType.PURCHASE ? user : requestUser;
         var sellerUser = operationType == OperationType.SALE ? user : requestUser;
 
-        return Transaction.builder()
+        if (!sellerUser.hasEnoughQuantity(this)) {
+            throw new RuntimeException("Seller does not have enough quantity to sell");
+        }
+
+       var transaction = Transaction.builder()
                 .tradingIntention(this)
                 .amount(amount)
                 .price(price)
@@ -61,6 +65,10 @@ public class TradingIntention extends EntityMetaData {
                 .cryptoCurrency(cryptoCurrencyType)
                 .status(transactionStatus)
                 .build();
+
+        buyerUser.addBuyTransaction(transaction);
+        sellerUser.addSellTransaction(transaction);
+        return transaction;
     }
 
     private boolean isAmountOutOfFivePercentRange() {

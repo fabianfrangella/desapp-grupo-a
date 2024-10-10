@@ -72,11 +72,24 @@ public class CryptoUser extends EntityMetaData {
     private TransactionStrategy transactionStrategy;
 
     public TradingIntention makeIntention(TradingIntention intention, CryptoPrice cryptoPrice) {
+
+        if (!hasEnoughQuantity(intention) && intention.getOperationType() == OperationType.SALE) {
+            throw new RuntimeException("User does not have enough quantity to sell");
+        }
+
         intention.setUser(this);
         intention.setStatus(TradingIntention.Status.ACTIVE);
         intention.setPrice(cryptoPrice);
         intentions.add(intention);
         return intention;
+    }
+
+    public boolean hasEnoughQuantity(TradingIntention intention){
+        var cryptoActive = cryptoActives.stream()
+                .filter(c -> c.getType().equals(intention.getCryptoCurrencyType()))
+                .findFirst().orElseThrow(() -> new RuntimeException("User does not have this type: " + intention.getCryptoCurrencyType()));
+
+        return cryptoActive.getQuantity() >= intention.getQuantity();
     }
 
     public TradingIntention cancelIntention(Long intentionId) {
@@ -89,6 +102,15 @@ public class CryptoUser extends EntityMetaData {
 
     public void addBuyTransaction(Transaction transaction) {
         buyTransactions.add(transaction);
+        addQuantity(transaction);
+    }
+
+    public void addSellTransaction(Transaction transaction) {
+        sellTransactions.add(transaction);
+        removeQuantity(transaction);
+    }
+
+    public void addQuantity(Transaction transaction) {
         if (cryptoActives.stream().anyMatch(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency()))) {
             var maybeCrypto = cryptoActives.stream().filter(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency())).findFirst();
             maybeCrypto.ifPresent((crypto) -> {
@@ -97,8 +119,7 @@ public class CryptoUser extends EntityMetaData {
         }
     }
 
-    public void addSellTransaction(Transaction transaction) {
-        sellTransactions.add(transaction);
+    public void removeQuantity(Transaction transaction) {
         if (cryptoActives.stream().anyMatch(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency()))) {
             var maybeCrypto = cryptoActives.stream().filter(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency())).findFirst();
             maybeCrypto.ifPresent((crypto) -> {

@@ -54,6 +54,8 @@ public class Transaction extends EntityMetaData {
         if (action == TransactionAction.CANCEL) {
             cancel();
             tradingIntention.getUser().doCancelPenalty();
+            buyer.removeQuantity(this);
+            seller.addQuantity(this);
             return;
         }
         var newReputation = 5;
@@ -63,8 +65,6 @@ public class Transaction extends EntityMetaData {
         confirm();
         buyer.addReputation(newReputation);
         seller.addReputation(newReputation);
-        buyer.addBuyTransaction(this);
-        seller.addSellTransaction(this);
         tradingIntention.setStatus(TradingIntention.Status.INACTIVE);
     }
 
