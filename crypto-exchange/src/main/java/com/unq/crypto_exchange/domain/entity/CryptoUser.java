@@ -10,9 +10,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -145,4 +144,21 @@ public class CryptoUser extends EntityMetaData {
         return (long) buyTransactions.size() + (long) sellTransactions.size();
     }
 
+    public List<CryptoActive> findCryptoActivesOperatedBetween(Date from, Date to) {
+        return cryptoActives.stream()
+                .filter(crypto ->
+                    hasBeenOperatedBetween(from, to, crypto, sellTransactions ) ||
+                    hasBeenOperatedBetween(from, to, crypto, buyTransactions)
+                ).collect(Collectors.toList());
+    }
+
+    private boolean hasBeenOperatedBetween(Date from, Date to, CryptoActive crypto, Set<Transaction> transactions) {
+        return transactions.stream()
+                .anyMatch(transaction -> transaction.getCryptoCurrency() == crypto.getType()
+                        && isBetween(from, to, Date.from(transaction.getCreatedAt())));
+    }
+
+    private boolean isBetween(Date from, Date to, Date date) {
+        return date.after(from) && date.before(to);
+    }
 }

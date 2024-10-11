@@ -6,6 +6,8 @@ import com.unq.crypto_exchange.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +30,12 @@ public class TransactionController {
 
     @Operation(summary = "Confirms the transaction")
     @PostMapping("/confirm/{transactionId}")
-    public TransactionResponseDTO completeTransaction(
+    public ResponseEntity<TransactionResponseDTO> completeTransaction(
             @Parameter(description = "The transaction id that will be completed", required = true) @PathVariable("transactionId") Long intentionId) {
-        return TransactionResponseDTO.fromModel(transactionService.processTransaction(intentionId, TransactionAction.CONFIRM));
+        var response = TransactionResponseDTO.fromModel(transactionService.processTransaction(intentionId, TransactionAction.CONFIRM));
+        return ResponseEntity
+                .status(response.getStatus() == TransactionResponseDTO.TransactionStatus.FAILED ? HttpStatus.BAD_REQUEST : HttpStatus.OK)
+                .body(response);
     }
 
     @Operation(summary = "Cancels the transaction")

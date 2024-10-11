@@ -25,7 +25,7 @@ public class TransactionService {
         var user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id: " + userId + " was not found"));
 
-        var transaction = intention.doTransaction(user);
+        var transaction = intention.createTransaction(user);
 
         transactionRepository.save(transaction);
 

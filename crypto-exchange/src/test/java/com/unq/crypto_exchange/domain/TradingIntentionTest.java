@@ -26,7 +26,7 @@ public class TradingIntentionTest {
         Mockito.when(user.getId()).thenReturn(1L);
         Mockito.when(requesterUser.getId()).thenReturn(2L);
         Assertions.assertThrows(InactiveTradingIntentionException.class,
-                () -> tradingIntention.doTransaction(requesterUser));
+                () -> tradingIntention.createTransaction(requesterUser));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class TradingIntentionTest {
                 .withUser(user)
                 .withOperationType(OperationType.CANCEL)
                 .build();
-        Assertions.assertThrows(IllegalCancelOperationException.class, () -> tradingIntention.doTransaction(requesterUser));
+        Assertions.assertThrows(IllegalCancelOperationException.class, () -> tradingIntention.createTransaction(requesterUser));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class TradingIntentionTest {
                 .withUser(user)
                 .withOperationType(OperationType.PURCHASE)
                 .build();
-        Assertions.assertThrows(IllegalOperationException.class, () -> tradingIntention.doTransaction(requesterUser));
+        Assertions.assertThrows(IllegalOperationException.class, () -> tradingIntention.createTransaction(requesterUser));
     }
 
 }

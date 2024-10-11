@@ -14,7 +14,7 @@ public class TransactionResponseDTO {
     private CryptoPriceDTO cryptoPrice;
     private String buyer;
     private String seller;
-    private String status;
+    private TransactionStatus status;
 
     public static TransactionResponseDTO fromModel(Transaction transaction) {
         return TransactionResponseDTO.builder()
@@ -27,7 +27,23 @@ public class TransactionResponseDTO {
                         .build())
                 .buyer(transaction.getBuyer().getLastName() + ", " + transaction.getBuyer().getName())
                 .seller(transaction.getSeller().getLastName() + ", " + transaction.getSeller().getName())
-                .status(transaction.getStatus().name())
+                .status(TransactionStatus.fromModel(transaction.getStatus()))
                 .build();
+    }
+
+    public enum TransactionStatus {
+        COMPLETED,
+        PENDING,
+        CANCELED,
+        FAILED;
+
+        public static TransactionStatus fromModel(Transaction.TransactionStatus status) {
+            return switch(status) {
+                case Transaction.TransactionStatus.CANCELED -> CANCELED;
+                case Transaction.TransactionStatus.COMPLETED -> COMPLETED;
+                case Transaction.TransactionStatus.PENDING -> PENDING;
+                case Transaction.TransactionStatus.FAILED -> FAILED;
+            };
+        }
     }
 }

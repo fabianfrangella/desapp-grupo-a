@@ -33,7 +33,7 @@ public class TradingIntention extends EntityMetaData {
         ACTIVE, INACTIVE
     }
 
-    public Transaction doTransaction(CryptoUser requestUser) {
+    public Transaction createTransaction(CryptoUser requestUser) {
         if (status == Status.INACTIVE) throw new InactiveTradingIntentionException("The TradingIntention is Inactive");
         if (operationType == OperationType.CANCEL && !requestUser.equals(user)) {
             throw new IllegalCancelOperationException("Only the System or the owner of the TradingIntention can cancel it");
@@ -54,21 +54,17 @@ public class TradingIntention extends EntityMetaData {
             throw new IllegalOperationException("Seller does not have enough quantity to sell");
         }
 
-       var transaction = Transaction.builder()
-                .tradingIntention(this)
-                .amount(amount)
-                .price(price)
-                .buyer(buyerUser)
-                .seller(sellerUser)
-                .operationType(operationType)
-                .quantity(quantity)
-                .cryptoCurrency(cryptoCurrencyType)
-                .status(transactionStatus)
-                .build();
-
-        buyerUser.addBuyTransaction(transaction);
-        sellerUser.addSellTransaction(transaction);
-        return transaction;
+        return Transaction.builder()
+                 .tradingIntention(this)
+                 .amount(amount)
+                 .price(price)
+                 .buyer(buyerUser)
+                 .seller(sellerUser)
+                 .operationType(operationType)
+                 .quantity(quantity)
+                 .cryptoCurrency(cryptoCurrencyType)
+                 .status(transactionStatus)
+                 .build();
     }
 
     private boolean isAmountOutOfFivePercentRange() {

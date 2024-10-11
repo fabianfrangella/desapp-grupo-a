@@ -33,7 +33,7 @@ public class TradingIntentionService {
     }
 
     public List<TradingIntention> find() {
-        return intentionRepository.findAll();
+        return intentionRepository.findAllByStatus(TradingIntention.Status.ACTIVE);
     }
 
     public TradingIntention findById(Long id) {

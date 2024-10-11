@@ -42,21 +42,27 @@ public class Transaction extends EntityMetaData {
 
     private TransactionStatus status = TransactionStatus.PENDING;
 
-    public void process(TransactionAction action) {
+    public TransactionStatus process(TransactionAction action) {
+        // TODO: revisar esto
         if (getStatus() == Transaction.TransactionStatus.COMPLETED || getStatus() == Transaction.TransactionStatus.CANCELED) {
+            tradingIntention.setStatus(TradingIntention.Status.INACTIVE);
             throw new IllegalOperationException("The transaction has been already processed");
         }
 
         if (tradingIntention.getStatus() == TradingIntention.Status.INACTIVE) {
+            tradingIntention.setStatus(TradingIntention.Status.INACTIVE);
             throw new InactiveTradingIntentionException("Trading intention is inactive");
+        }
+
+        if (!seller.hasEnoughQuantity(tradingIntention)) {
+            tradingIntention.setStatus(TradingIntention.Status.INACTIVE);
+            return status;
         }
 
         if (action == TransactionAction.CANCEL) {
             cancel();
             tradingIntention.getUser().doCancelPenalty();
-            buyer.removeQuantity(this);
-            seller.addQuantity(this);
-            return;
+            return status;
         }
         var points = 5;
         if (Instant.now().isBefore(tradingIntention.getCreatedAt().plus(30, ChronoUnit.MINUTES))) {
@@ -65,7 +71,10 @@ public class Transaction extends EntityMetaData {
         confirm();
         buyer.addPoints(points);
         seller.addPoints(points);
+        buyer.addQuantity(this);
+        seller.removeQuantity(this);
         tradingIntention.setStatus(TradingIntention.Status.INACTIVE);
+        return status;
     }
 
     public void confirm() {
@@ -76,9 +85,14 @@ public class Transaction extends EntityMetaData {
         this.status = TransactionStatus.CANCELED;
     }
 
+    public void fail() {
+        this.status = TransactionStatus.FAILED;
+    }
+
     public enum TransactionStatus {
         COMPLETED,
         PENDING,
-        CANCELED
+        CANCELED,
+        FAILED
     }
 }
