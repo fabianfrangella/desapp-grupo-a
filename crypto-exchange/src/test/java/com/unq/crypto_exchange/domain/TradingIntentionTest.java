@@ -1,7 +1,6 @@
 package com.unq.crypto_exchange.domain;
 
 
-import com.unq.crypto_exchange.domain.builder.CryptoUserBuilder;
 import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.domain.entity.OperationType;
