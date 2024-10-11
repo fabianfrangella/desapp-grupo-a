@@ -2,6 +2,7 @@ package com.unq.crypto_exchange.api.controller;
 
 import com.unq.crypto_exchange.api.dto.CryptoPriceDTO;
 import com.unq.crypto_exchange.service.CryptoPriceService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public class CryptoPriceController {
 
     private final CryptoPriceService cryptoPriceService;
 
+    @Operation(summary = "Get all cryptocurrency prices")
     @GetMapping("/find")
     public ResponseEntity<List<CryptoPriceDTO>> find() {
         return new ResponseEntity<>(

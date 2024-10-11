@@ -43,7 +43,7 @@ public class CryptoUserTest {
     public void whenDoCancelPenaltyUserShouldHave20lessReputation() {
         var user = CryptoUserBuilder.defaultCryptoUser();
         user.doCancelPenalty();
-        Assertions.assertEquals(-20, user.getPoints());
+        Assertions.assertEquals(80, user.getPoints());
     }
 
 }

@@ -14,6 +14,7 @@ public class CryptoUserBuilder {
                 .email("email@test.com")
                 .password("Password1#a")
                 .cryptoWalletAddress("12345678")
+                .points(100)
                 .cryptoActives(Collections.singleton(CryptoActiveBuilder.defaultCryptoActive()))
                 .build();
     }
