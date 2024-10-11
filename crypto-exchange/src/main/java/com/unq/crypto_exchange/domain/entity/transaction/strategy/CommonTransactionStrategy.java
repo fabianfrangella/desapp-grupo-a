@@ -9,13 +9,13 @@ import java.time.temporal.ChronoUnit;
 public class CommonTransactionStrategy implements TransactionStrategy {
     @Override
     public void doTransaction(CryptoUser user, Transaction transaction) {
-        var reputation = 5;
+        var points = 5;
         if (Instant.now().isBefore(transaction.getTradingIntention().getCreatedAt().plus(30, ChronoUnit.MINUTES))) {
-            reputation = 10;
+            points = 10;
         }
         transaction.confirm();
-        transaction.getBuyer().addReputation(reputation);
-        transaction.getSeller().addReputation(reputation);
+        transaction.getBuyer().addPoints(points);
+        transaction.getSeller().addPoints(points);
     }
 
 }

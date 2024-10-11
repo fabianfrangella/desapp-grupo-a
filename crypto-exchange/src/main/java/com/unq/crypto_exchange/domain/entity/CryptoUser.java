@@ -48,7 +48,7 @@ public class CryptoUser extends EntityMetaData {
 
     @Builder.Default
     @NonNull
-    private Integer reputation = 0;
+    private Integer points = 0;
 
     @Builder.Default
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -127,11 +127,11 @@ public class CryptoUser extends EntityMetaData {
     }
 
     public void doCancelPenalty() {
-        reputation-= 20;
+        points = Math.max(0, points - 20);
     }
 
-    public void addReputation(Integer reputation) {
-        this.reputation+= reputation;
+    public void addPoints(Integer points) {
+        this.points += points;
     }
 
     public void fillInitialWallet() {

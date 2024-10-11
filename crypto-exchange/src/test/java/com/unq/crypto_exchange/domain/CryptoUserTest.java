@@ -5,12 +5,9 @@ import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoPrice;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
-import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.time.Instant;
 
 public class CryptoUserTest {
 
@@ -46,7 +43,7 @@ public class CryptoUserTest {
     public void whenDoCancelPenaltyUserShouldHave20lessReputation() {
         var user = CryptoUserBuilder.defaultCryptoUser();
         user.doCancelPenalty();
-        Assertions.assertEquals(-20, user.getReputation());
+        Assertions.assertEquals(-20, user.getPoints());
     }
 
 }

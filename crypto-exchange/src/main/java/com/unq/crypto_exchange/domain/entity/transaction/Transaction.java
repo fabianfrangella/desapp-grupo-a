@@ -58,13 +58,13 @@ public class Transaction extends EntityMetaData {
             seller.addQuantity(this);
             return;
         }
-        var newReputation = 5;
+        var points = 5;
         if (Instant.now().isBefore(tradingIntention.getCreatedAt().plus(30, ChronoUnit.MINUTES))) {
-            newReputation = 10;
+            points = 10;
         }
         confirm();
-        buyer.addReputation(newReputation);
-        seller.addReputation(newReputation);
+        buyer.addPoints(points);
+        seller.addPoints(points);
         tradingIntention.setStatus(TradingIntention.Status.INACTIVE);
     }
 

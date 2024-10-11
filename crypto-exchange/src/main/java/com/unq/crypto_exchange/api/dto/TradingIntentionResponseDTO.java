@@ -38,7 +38,7 @@ public class TradingIntentionResponseDTO {
                 .amount(tradingIntention.getAmount())
                 .user(tradingIntention.getUser().getLastName() + ", " + tradingIntention.getUser().getName())
                 .operations(tradingIntention.getUser().getNumberOperations())
-                .reputation(getReputation(tradingIntention.getUser().getNumberOperations(), tradingIntention.getUser().getReputation()))
+                .reputation(getReputation(tradingIntention.getUser().getNumberOperations(), tradingIntention.getUser().getPoints()))
                 .accountAddress(getAccountAddress(tradingIntention.getOperationType(), tradingIntention.getUser()))
                 .confirmAction(tradingIntention.getOperationType() == OperationType.SALE ? "Confirm recepit" : "I made the transfer")
                 .cancelAction("Cancel")

@@ -35,7 +35,7 @@ public class TradingIntentionResponseListDTO {
                 .quantity(tradingIntention.getQuantity())
                 .total(tradingIntention.getAmount().multiply(BigDecimal.valueOf(tradingIntention.getQuantity())))
                 .operations(tradingIntention.getUser().getNumberOperations())
-                .reputation(getReputation(tradingIntention.getUser().getNumberOperations(), tradingIntention.getUser().getReputation()))
+                .reputation(getReputation(tradingIntention.getUser().getNumberOperations(), tradingIntention.getUser().getPoints()))
                 .build();
     }
 
