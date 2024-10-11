@@ -5,6 +5,7 @@ import com.unq.crypto_exchange.domain.builder.CryptoUserBuilder;
 import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.domain.entity.OperationType;
+import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.exception.IllegalCancelOperationException;
 import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException;
 import com.unq.crypto_exchange.domain.entity.exception.InactiveTradingIntentionException;
@@ -18,7 +19,9 @@ public class TradingIntentionTest {
     @Test
     @DisplayName("When Do Transaction With Status Inactive Should Fail")
     public void whenDoTransactionWithStatusInactiveShouldFail() {
-        var tradingIntention = TradingIntentionBuilder.withInactiveStatus();
+        var tradingIntention = TradingIntentionBuilder.aTradingIntention()
+                .withStatus(TradingIntention.Status.INACTIVE)
+                .build();
         var user = Mockito.mock(CryptoUser.class);
         var requesterUser = Mockito.mock(CryptoUser.class);
         Mockito.when(user.getId()).thenReturn(1L);
@@ -34,7 +37,10 @@ public class TradingIntentionTest {
         var requesterUser = Mockito.mock(CryptoUser.class);
         Mockito.when(user.getId()).thenReturn(1L);
         Mockito.when(requesterUser.getId()).thenReturn(2L);
-        var tradingIntention = TradingIntentionBuilder.withUserAndOperation(user, OperationType.CANCEL);
+        var tradingIntention = TradingIntentionBuilder.aTradingIntention()
+                .withUser(user)
+                .withOperationType(OperationType.CANCEL)
+                .build();
         Assertions.assertThrows(IllegalCancelOperationException.class, () -> tradingIntention.doTransaction(requesterUser));
     }
 
@@ -45,9 +51,11 @@ public class TradingIntentionTest {
         var requesterUser = Mockito.mock(CryptoUser.class);
         Mockito.when(user.getId()).thenReturn(1L);
         Mockito.when(requesterUser.getId()).thenReturn(1L);
-        var tradingIntention = TradingIntentionBuilder.withUserAndOperation(user, OperationType.PURCHASE);
+        var tradingIntention = TradingIntentionBuilder.aTradingIntention()
+                .withUser(user)
+                .withOperationType(OperationType.PURCHASE)
+                .build();
         Assertions.assertThrows(IllegalOperationException.class, () -> tradingIntention.doTransaction(requesterUser));
     }
-
 
 }
