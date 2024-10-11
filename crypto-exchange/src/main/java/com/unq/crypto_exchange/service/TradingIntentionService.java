@@ -23,7 +23,7 @@ public class TradingIntentionService {
 
     public TradingIntention publishTradingIntention(Long userId, TradingIntention tradingIntention) {
         var user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User with id: " + userId + " was not found"));;
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + userId + " was not found"));
         var price = cryptoPriceRepository.findFirstByCryptoCurrencyTypeOrderByTimeDesc(tradingIntention.getCryptoCurrencyType())
                 .orElseThrow(() -> new PriceNotFoundException("Price not found for crypto"));
         user.makeIntention(tradingIntention, price);
@@ -33,6 +33,11 @@ public class TradingIntentionService {
 
     public List<TradingIntention> find() {
         return intentionRepository.findAll();
+    }
+
+    public TradingIntention findById(Long id) {
+        return intentionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Intention with id: " + id + " was not found"));
     }
 
 }

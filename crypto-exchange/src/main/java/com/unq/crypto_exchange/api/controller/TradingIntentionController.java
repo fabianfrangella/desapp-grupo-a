@@ -2,6 +2,7 @@ package com.unq.crypto_exchange.api.controller;
 
 import com.unq.crypto_exchange.api.dto.TradingIntentionDTO;
 import com.unq.crypto_exchange.api.dto.TradingIntentionResponseDTO;
+import com.unq.crypto_exchange.api.dto.TradingIntentionResponseListDTO;
 import com.unq.crypto_exchange.service.TradingIntentionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,20 +19,29 @@ public class TradingIntentionController {
     private final TradingIntentionService tradingIntentionService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<TradingIntentionResponseDTO> publishTradingIntention(@PathVariable("userId") Long userId,
-                                                                               @RequestBody TradingIntentionDTO tradingIntentionDTO) {
+    public ResponseEntity<TradingIntentionResponseListDTO> publishTradingIntention(@PathVariable("userId") Long userId,
+                                                                                   @RequestBody TradingIntentionDTO tradingIntentionDTO) {
         return new ResponseEntity<>(
-                TradingIntentionResponseDTO.fromModel(
+                TradingIntentionResponseListDTO.fromModel(
                         tradingIntentionService.publishTradingIntention(userId, tradingIntentionDTO.toModel())),
                         HttpStatus.CREATED
         );
     }
 
     @GetMapping("/find")
-    public ResponseEntity<List<TradingIntentionResponseDTO>> find() {
+    public ResponseEntity<List<TradingIntentionResponseListDTO>> find() {
+        return new ResponseEntity<>(
+                TradingIntentionResponseListDTO.fromModel(
+                        tradingIntentionService.find()),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<TradingIntentionResponseDTO> findById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(
                 TradingIntentionResponseDTO.fromModel(
-                        tradingIntentionService.find()),
+                        tradingIntentionService.findById(id)),
                 HttpStatus.OK
         );
     }
