@@ -5,7 +5,6 @@ import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchCryptoCurrencyException;
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
-import com.unq.crypto_exchange.domain.entity.transaction.strategy.TransactionStrategy;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -65,9 +64,6 @@ public class CryptoUser extends EntityMetaData {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CryptoActive> cryptoActives = new HashSet<>();
-
-    @Transient
-    private TransactionStrategy transactionStrategy;
 
     public TradingIntention makeIntention(TradingIntention intention, CryptoPrice cryptoPrice) {
 
