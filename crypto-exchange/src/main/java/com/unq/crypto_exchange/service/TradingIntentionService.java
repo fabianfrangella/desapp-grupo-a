@@ -1,6 +1,7 @@
 package com.unq.crypto_exchange.service;
 
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
+import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
 import com.unq.crypto_exchange.repository.CryptoPriceRepository;
 import com.unq.crypto_exchange.repository.TradingIntentionRepository;
 import com.unq.crypto_exchange.repository.UserRepository;
@@ -37,7 +38,7 @@ public class TradingIntentionService {
 
     public TradingIntention findById(Long id) {
         return intentionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Intention with id: " + id + " was not found"));
+                .orElseThrow(() -> new NoSuchTradingIntentionException("Intention with id: " + id + " was not found"));
     }
 
 }

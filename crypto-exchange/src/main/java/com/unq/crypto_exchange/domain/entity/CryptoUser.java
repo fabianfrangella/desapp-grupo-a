@@ -1,6 +1,8 @@
 package com.unq.crypto_exchange.domain.entity;
 
 
+import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException;
+import com.unq.crypto_exchange.domain.entity.exception.NoSuchCryptoCurrencyException;
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import com.unq.crypto_exchange.domain.entity.transaction.strategy.TransactionStrategy;
@@ -70,7 +72,7 @@ public class CryptoUser extends EntityMetaData {
     public TradingIntention makeIntention(TradingIntention intention, CryptoPrice cryptoPrice) {
 
         if (!hasEnoughQuantity(intention) && intention.getOperationType() == OperationType.SALE) {
-            throw new RuntimeException("User does not have enough quantity to sell");
+            throw new IllegalOperationException("User does not have enough quantity to sell");
         }
 
         intention.setUser(this);
@@ -83,7 +85,7 @@ public class CryptoUser extends EntityMetaData {
     public boolean hasEnoughQuantity(TradingIntention intention){
         var cryptoActive = cryptoActives.stream()
                 .filter(c -> c.getType().equals(intention.getCryptoCurrencyType()))
-                .findFirst().orElseThrow(() -> new RuntimeException("User does not have this type: " + intention.getCryptoCurrencyType()));
+                .findFirst().orElseThrow(() -> new NoSuchCryptoCurrencyException("User does not have this type: " + intention.getCryptoCurrencyType()));
 
         return cryptoActive.getQuantity() >= intention.getQuantity();
     }

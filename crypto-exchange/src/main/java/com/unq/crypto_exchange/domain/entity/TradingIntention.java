@@ -51,7 +51,7 @@ public class TradingIntention extends EntityMetaData {
         var sellerUser = operationType == OperationType.SALE ? user : requestUser;
 
         if (!sellerUser.hasEnoughQuantity(this)) {
-            throw new RuntimeException("Seller does not have enough quantity to sell");
+            throw new IllegalOperationException("Seller does not have enough quantity to sell");
         }
 
        var transaction = Transaction.builder()

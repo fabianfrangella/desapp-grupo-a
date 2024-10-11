@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints={
-        @UniqueConstraint(columnNames = {"type", "user_id"})
+@UniqueConstraint(columnNames = {"type", "user_id"})
 })
 public class CryptoActive extends EntityMetaData {
 

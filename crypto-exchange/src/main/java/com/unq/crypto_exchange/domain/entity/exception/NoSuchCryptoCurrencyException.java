@@ -1,7 +1,7 @@
 package com.unq.crypto_exchange.domain.entity.exception;
 
-public class NoSuchCyptoCurrencyException extends RuntimeException {
-    public NoSuchCyptoCurrencyException(String message) {
+public class NoSuchCryptoCurrencyException extends RuntimeException {
+    public NoSuchCryptoCurrencyException(String message) {
         super(message);
     }
 }

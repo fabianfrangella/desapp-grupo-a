@@ -43,7 +43,7 @@ public class TradingIntentionResponseListDTO {
         return tradingIntentions.stream().map(TradingIntentionResponseListDTO::fromModel).toList();
     }
 
-    public static String getReputation(Long numberOperations, Integer reputation) {
+    private static String getReputation(Long numberOperations, Integer reputation) {
 
         if (numberOperations != 0) {
             var reputationValue = BigDecimal.valueOf(reputation);

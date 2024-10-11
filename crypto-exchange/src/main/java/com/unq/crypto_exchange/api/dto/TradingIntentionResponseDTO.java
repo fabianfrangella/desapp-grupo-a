@@ -53,7 +53,7 @@ public class TradingIntentionResponseDTO {
         return user.getCryptoWalletAddress();
     }
 
-    public static String getReputation(Long numberOperations, Integer reputation) {
+    private static String getReputation(Long numberOperations, Integer reputation) {
 
         if (numberOperations != 0) {
             var reputationValue = BigDecimal.valueOf(reputation);
