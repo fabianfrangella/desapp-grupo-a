@@ -17,7 +17,7 @@ public class TradingIntentionTest {
 
     @Test
     @DisplayName("When Do Transaction With Status Inactive Should Fail")
-    public void whenDoTransactionWithStatusInactiveShouldFail() {
+    void whenDoTransactionWithStatusInactiveShouldFail() {
         var tradingIntention = TradingIntentionBuilder.aTradingIntention()
                 .withStatus(TradingIntention.Status.INACTIVE)
                 .build();
@@ -31,7 +31,7 @@ public class TradingIntentionTest {
 
     @Test
     @DisplayName("When Do Transaction With Cancel Operation And Different Requester User Should Fail")
-    public void whenDoTransactionWithCancelOperationAndDifferentRequesterUserShouldFail() {
+    void whenDoTransactionWithCancelOperationAndDifferentRequesterUserShouldFail() {
         var user = Mockito.mock(CryptoUser.class);
         var requesterUser = Mockito.mock(CryptoUser.class);
         Mockito.when(user.getId()).thenReturn(1L);
@@ -45,7 +45,7 @@ public class TradingIntentionTest {
 
     @Test
     @DisplayName("When Do Transaction With Same Buyer and Seller User Should Fail")
-    public void whenDoTransactionWithSameBuyerAndSellerUserShouldFail() {
+    void whenDoTransactionWithSameBuyerAndSellerUserShouldFail() {
         var user = Mockito.mock(CryptoUser.class);
         var requesterUser = Mockito.mock(CryptoUser.class);
         Mockito.when(user.getId()).thenReturn(1L);

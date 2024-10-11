@@ -18,7 +18,7 @@ import java.util.Set;
 public class CryptoUserTest {
 
     @Test
-    public void whenMakeIntentionShouldAddTheIntentionToTheUser() {
+    void whenMakeIntentionShouldAddTheIntentionToTheUser() {
         var cryptoActive = CryptoActiveBuilder.aCryptoActive()
                 .withType(CryptoCurrencyType.AAVEUSDT)
                 .build();
@@ -35,7 +35,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenCancelIntentionShouldSetIntentionStatusToInactive() {
+    void whenCancelIntentionShouldSetIntentionStatusToInactive() {
         var cryptoActive = CryptoActiveBuilder.aCryptoActive()
                 .withType(CryptoCurrencyType.AAVEUSDT)
                 .build();
@@ -53,7 +53,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenCancelNotExistentIntentionShouldThrowException() {
+    void whenCancelNotExistentIntentionShouldThrowException() {
         var user = CryptoUserBuilder.aCryptoUser().build();
 
         Assertions.assertThrows(NoSuchTradingIntentionException.class, () -> user.cancelIntention(1L));
@@ -61,7 +61,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenDoCancelPenaltyUserShouldHave20lessReputation() {
+    void whenDoCancelPenaltyUserShouldHave20lessReputation() {
         var user = CryptoUserBuilder.aCryptoUser()
                 .withPoints(100)
                 .build();
@@ -70,7 +70,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenAddPointsShouldWorks() {
+    void whenAddPointsShouldWorks() {
         var user = CryptoUserBuilder.aCryptoUser()
                 .withPoints(100)
                 .build();
@@ -79,7 +79,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenAddBuyTransactionShouldWorks() {
+    void whenAddBuyTransactionShouldWorks() {
         var user = CryptoUserBuilder.aCryptoUser()
                 .withBuyTransactions(HashSet.newHashSet(0))
                 .withSellTransactions(HashSet.newHashSet(0))
@@ -94,7 +94,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenAddSellTransactionShouldWorks() {
+    void whenAddSellTransactionShouldWorks() {
         var user = CryptoUserBuilder.aCryptoUser()
                 .withBuyTransactions(HashSet.newHashSet(0))
                 .withSellTransactions(HashSet.newHashSet(0))
@@ -109,7 +109,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenAddQuantityShouldUpdateCryptoActive() {
+    void whenAddQuantityShouldUpdateCryptoActive() {
 
         var cryptoActive = CryptoActiveBuilder.aCryptoActive()
                 .withType(CryptoCurrencyType.AAVEUSDT)
@@ -131,7 +131,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenRemoveQuantityShouldUpdateCryptoActive() {
+    void whenRemoveQuantityShouldUpdateCryptoActive() {
 
         var cryptoActive = CryptoActiveBuilder.aCryptoActive()
                 .withType(CryptoCurrencyType.AAVEUSDT)
@@ -153,7 +153,7 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenAskNumberOperationsShouldReturnCorrectCount() {
+    void whenAskNumberOperationsShouldReturnCorrectCount() {
         var user = CryptoUserBuilder.aCryptoUser()
                 .withBuyTransactions(new HashSet<>(Set.of(new Transaction(), new Transaction())))
                 .withSellTransactions(new HashSet<>(Set.of(new Transaction())))

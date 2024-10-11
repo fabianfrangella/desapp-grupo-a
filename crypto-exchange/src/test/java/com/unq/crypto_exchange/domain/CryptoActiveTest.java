@@ -4,10 +4,10 @@ import com.unq.crypto_exchange.domain.builder.CryptoActiveBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CryptoActiveTest {
+class CryptoActiveTest {
 
     @Test
-    public void whenAddQuantityShouldWorks() {
+    void whenAddQuantityShouldWorks() {
         var cryptoActive = CryptoActiveBuilder.aCryptoActive()
                 .withQuantity(100L)
                 .build();
@@ -18,7 +18,7 @@ public class CryptoActiveTest {
     }
 
     @Test
-    public void whenRemoveQuantityShouldWorks() {
+    void whenRemoveQuantityShouldWorks() {
         var cryptoActive = CryptoActiveBuilder.aCryptoActive()
                 .withQuantity(100L)
                 .build();

@@ -1,13 +1,11 @@
 package com.unq.crypto_exchange.domain;
 
-import com.unq.crypto_exchange.domain.builder.CryptoUserBuilder;
 import com.unq.crypto_exchange.domain.builder.TransactionBuilder;
 import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException;
 import com.unq.crypto_exchange.domain.entity.exception.InactiveTradingIntentionException;
-import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction.TransactionStatus;
 import com.unq.crypto_exchange.domain.entity.transaction.TransactionAction;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +18,7 @@ import java.time.temporal.ChronoUnit;
 public class TransactionTest {
 
     @Test
-    public void whenTransactionIsCompletedShouldThrowException() {
+    void whenTransactionIsCompletedShouldThrowException() {
         var transaction = TransactionBuilder.aTransaction()
                 .withStatus(TransactionStatus.COMPLETED)
                 .build();
@@ -29,7 +27,7 @@ public class TransactionTest {
     }
 
     @Test
-    public void whenTransactionIsCanceledShouldThrowException() {
+    void whenTransactionIsCanceledShouldThrowException() {
         var transaction = TransactionBuilder.aTransaction()
                 .withStatus(TransactionStatus.CANCELED)
                 .build();
@@ -38,7 +36,7 @@ public class TransactionTest {
     }
     
     @Test
-    public void whenTradingIntentionIsInactiveShouldThrowException() {
+    void whenTradingIntentionIsInactiveShouldThrowException() {
         var tradingIntention = TradingIntentionBuilder.aTradingIntention()
                 .withStatus(TradingIntention.Status.INACTIVE)
                 .build();
@@ -51,7 +49,7 @@ public class TransactionTest {
     }
 
     @Test
-    public void whenCancelTransactionShouldApplyPenalties() {
+    void whenCancelTransactionShouldApplyPenalties() {
         var buyer = Mockito.mock(CryptoUser.class);
         var seller = Mockito.mock(CryptoUser.class);
         var tradingIntention = TradingIntentionBuilder.aTradingIntention()
@@ -74,7 +72,7 @@ public class TransactionTest {
     }
 
     @Test
-    public void whenConfirmTransactionWithin30MinutesShouldAdd10Points() {
+    void whenConfirmTransactionWithin30MinutesShouldAdd10Points() {
         var buyer = Mockito.mock(CryptoUser.class);
         var seller = Mockito.mock(CryptoUser.class);
         var tradingIntention = Mockito.mock(TradingIntention.class);
@@ -97,7 +95,7 @@ public class TransactionTest {
     }
 
     @Test
-    public void whenConfirmTransactionAfter30MinutesShouldAdd5Points() {
+    void whenConfirmTransactionAfter30MinutesShouldAdd5Points() {
         var buyer = Mockito.mock(CryptoUser.class);
         var seller = Mockito.mock(CryptoUser.class);
         var tradingIntention = Mockito.mock(TradingIntention.class);
