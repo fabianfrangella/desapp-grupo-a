@@ -3,16 +3,12 @@ package com.unq.crypto_exchange.domain.entity;
 
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
-import com.unq.crypto_exchange.domain.entity.transaction.strategy.BuyerUserStrategy;
-import com.unq.crypto_exchange.domain.entity.transaction.strategy.SellerUserStrategy;
 import com.unq.crypto_exchange.domain.entity.transaction.strategy.TransactionStrategy;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -145,6 +141,10 @@ public class CryptoUser extends EntityMetaData {
 
             cryptoActives.add(cryptoActive);
         });
+    }
+
+    public Long getNumberOperations() {
+        return (long) buyTransactions.size() + (long) sellTransactions.size();
     }
 
 }
