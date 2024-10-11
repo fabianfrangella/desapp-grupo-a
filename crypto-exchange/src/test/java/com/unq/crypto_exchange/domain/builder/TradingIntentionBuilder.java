@@ -7,6 +7,7 @@ import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 public class TradingIntentionBuilder {
 
@@ -18,6 +19,7 @@ public class TradingIntentionBuilder {
     private OperationType operationType;
     private TradingIntention.Status status = TradingIntention.Status.ACTIVE;
     private Long id = 1L;
+    private Instant createdAt;
 
     public static TradingIntentionBuilder aTradingIntention() {
         return new TradingIntentionBuilder();
@@ -33,6 +35,7 @@ public class TradingIntentionBuilder {
         tradingIntention.setOperationType(operationType);
         tradingIntention.setStatus(status);
         tradingIntention.setId(id);
+        tradingIntention.setCreatedAt(createdAt);
         return tradingIntention;
     }
 
@@ -73,6 +76,11 @@ public class TradingIntentionBuilder {
 
     public TradingIntentionBuilder withId(final Long id) {
         this.id = id;
+        return this;
+    }
+
+    public TradingIntentionBuilder withCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
         return this;
     }
 }
