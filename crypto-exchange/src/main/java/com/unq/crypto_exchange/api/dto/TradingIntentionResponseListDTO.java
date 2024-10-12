@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -23,6 +24,7 @@ public class TradingIntentionResponseListDTO {
     private BigDecimal total;
     private Long operations;
     private String reputation;
+    private Long id;
 
     public static TradingIntentionResponseListDTO fromModel(TradingIntention tradingIntention) {
         return TradingIntentionResponseListDTO.builder()
@@ -35,22 +37,13 @@ public class TradingIntentionResponseListDTO {
                 .quantity(tradingIntention.getQuantity())
                 .total(tradingIntention.getAmount().multiply(BigDecimal.valueOf(tradingIntention.getQuantity())))
                 .operations(tradingIntention.getUser().getNumberOperations())
-                .reputation(getReputation(tradingIntention.getUser().getNumberOperations(), tradingIntention.getUser().getPoints()))
+                .reputation(!Objects.equals(tradingIntention.getUser().getReputation(), BigDecimal.ZERO) ?
+                        tradingIntention.getUser().getReputation().toString() : "No operations")
+                .id(tradingIntention.getId())
                 .build();
     }
 
     public static List<TradingIntentionResponseListDTO> fromModel(List<TradingIntention> tradingIntentions) {
         return tradingIntentions.stream().map(TradingIntentionResponseListDTO::fromModel).toList();
-    }
-
-    private static String getReputation(Long numberOperations, Integer reputation) {
-
-        if (numberOperations != 0) {
-            var reputationValue = BigDecimal.valueOf(reputation);
-            var operationsValue = BigDecimal.valueOf(numberOperations);
-            var result = reputationValue.divide(operationsValue, 2, RoundingMode.HALF_UP);
-            return result.toString();
-        }
-        return "No operations";
     }
 }

@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -140,8 +142,27 @@ public class CryptoUser extends EntityMetaData {
         });
     }
 
+    public BigDecimal getReputation() {
+        var numberOperations = getNumberOperations();
+
+        if (numberOperations != 0) {
+            var reputationValue = BigDecimal.valueOf(points);
+            var operationsValue = BigDecimal.valueOf(numberOperations);
+            return reputationValue.divide(operationsValue, 2, RoundingMode.HALF_UP);
+        }
+        return BigDecimal.ZERO;
+    }
+
     public Long getNumberOperations() {
-        return (long) buyTransactions.size() + (long) sellTransactions.size();
+        return getSizeCompletedOperations(buyTransactions) +
+                getSizeCompletedOperations(sellTransactions);
+    }
+
+    private Long getSizeCompletedOperations (Set<Transaction> transactions) {
+        return (long) transactions.stream()
+                .filter((transaction -> transaction.getStatus() == Transaction.TransactionStatus.COMPLETED))
+                .toList()
+                .size();
     }
 
     public List<CryptoActive> findCryptoActivesOperatedBetween(Date from, Date to) {

@@ -5,7 +5,6 @@ import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException;
-import com.unq.crypto_exchange.domain.entity.exception.InactiveTradingIntentionException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction.TransactionStatus;
 import com.unq.crypto_exchange.domain.entity.transaction.TransactionAction;
 import org.junit.jupiter.api.Assertions;
@@ -45,7 +44,9 @@ public class TransactionTest {
                 .withTradingIntention(tradingIntention)
                 .build();
 
-        Assertions.assertThrows(InactiveTradingIntentionException.class, () -> transaction.process(TransactionAction.CONFIRM));
+        transaction.process(TransactionAction.CONFIRM);
+
+        Assertions.assertEquals(TransactionStatus.FAILED, transaction.getStatus());
     }
 
     @Test
@@ -63,12 +64,12 @@ public class TransactionTest {
                 .withTradingIntention(tradingIntention)
                 .build();
 
+        Mockito.when(seller.hasEnoughQuantity(tradingIntention)).thenReturn(true);
+
         transaction.process(TransactionAction.CANCEL);
 
         Assertions.assertEquals(TransactionStatus.CANCELED, transaction.getStatus());
         Mockito.verify(tradingIntention.getUser(), Mockito.times(1)).doCancelPenalty();
-        Mockito.verify(buyer, Mockito.times(1)).removeQuantity(transaction);
-        Mockito.verify(seller, Mockito.times(1)).addQuantity(transaction);
     }
 
     @Test
@@ -78,6 +79,7 @@ public class TransactionTest {
         var tradingIntention = Mockito.mock(TradingIntention.class);
 
         Mockito.when(tradingIntention.getStatus()).thenReturn(TradingIntention.Status.ACTIVE);
+        Mockito.when(seller.hasEnoughQuantity(tradingIntention)).thenReturn(true);
         Mockito.when(tradingIntention.getCreatedAt()).thenReturn(Instant.now().minus(10, ChronoUnit.MINUTES));
 
         var transaction = TransactionBuilder.aTransaction()
@@ -101,6 +103,7 @@ public class TransactionTest {
         var tradingIntention = Mockito.mock(TradingIntention.class);
 
         Mockito.when(tradingIntention.getStatus()).thenReturn(TradingIntention.Status.ACTIVE);
+        Mockito.when(seller.hasEnoughQuantity(tradingIntention)).thenReturn(true);
         Mockito.when(tradingIntention.getCreatedAt()).thenReturn(Instant.now().minus(40, ChronoUnit.MINUTES));
 
         var transaction = TransactionBuilder.aTransaction()

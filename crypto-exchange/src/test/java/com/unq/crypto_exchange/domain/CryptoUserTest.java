@@ -3,6 +3,7 @@ package com.unq.crypto_exchange.domain;
 import com.unq.crypto_exchange.domain.builder.CryptoActiveBuilder;
 import com.unq.crypto_exchange.domain.builder.CryptoUserBuilder;
 import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
+import com.unq.crypto_exchange.domain.builder.TransactionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 import com.unq.crypto_exchange.domain.entity.CryptoPrice;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
@@ -154,13 +155,17 @@ public class CryptoUserTest {
 
     @Test
     void whenAskNumberOperationsShouldReturnCorrectCount() {
+        var transaction = TransactionBuilder.aTransaction()
+                .withStatus(Transaction.TransactionStatus.COMPLETED)
+                .build();
+
         var user = CryptoUserBuilder.aCryptoUser()
-                .withBuyTransactions(new HashSet<>(Set.of(new Transaction(), new Transaction())))
-                .withSellTransactions(new HashSet<>(Set.of(new Transaction())))
+                .withBuyTransactions(new HashSet<>(Set.of(transaction)))
+                .withSellTransactions(new HashSet<>(Set.of(transaction)))
                 .build();
 
         Long numberOfOperations = user.getNumberOperations();
 
-        Assertions.assertEquals(3L, numberOfOperations);
+        Assertions.assertEquals(2L, numberOfOperations);
     }
 }

@@ -9,6 +9,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -24,8 +25,8 @@ public class TradingIntentionResponseDTO {
     private String confirmAction;
     private String cancelAction;
     private OperationTypeDTO operation;
+    private Long id;
 
-    //TODO: Ver de refactorizar y heredar de ResponseList para reutilizar
     public static TradingIntentionResponseDTO fromModel(TradingIntention tradingIntention) {
         return TradingIntentionResponseDTO.builder()
                 .cryptoCurrency(tradingIntention.getCryptoCurrencyType())
@@ -38,29 +39,14 @@ public class TradingIntentionResponseDTO {
                 .amount(tradingIntention.getAmount())
                 .user(tradingIntention.getUser().getLastName() + ", " + tradingIntention.getUser().getName())
                 .operations(tradingIntention.getUser().getNumberOperations())
-                .reputation(getReputation(tradingIntention.getUser().getNumberOperations(), tradingIntention.getUser().getPoints()))
-                .accountAddress(getAccountAddress(tradingIntention.getOperationType(), tradingIntention.getUser()))
+                .reputation(!Objects.equals(tradingIntention.getUser().getReputation(), BigDecimal.ZERO) ?
+                        tradingIntention.getUser().getReputation().toString() : "No operations")
+                .accountAddress(tradingIntention.getOperationType() == OperationType.SALE ?
+                        tradingIntention.getUser().getCvu() : tradingIntention.getUser().getCryptoWalletAddress())
                 .confirmAction(tradingIntention.getOperationType() == OperationType.SALE ? "Confirm recepit" : "I made the transfer")
                 .cancelAction("Cancel")
                 .operation(OperationTypeDTO.fromModel(tradingIntention.getOperationType()))
+                .id(tradingIntention.getId())
                 .build();
-    }
-
-    private static String getAccountAddress(OperationType operationType, CryptoUser user) {
-        if (operationType == OperationType.SALE) {
-            return user.getCvu();
-        }
-        return user.getCryptoWalletAddress();
-    }
-
-    private static String getReputation(Long numberOperations, Integer reputation) {
-
-        if (numberOperations != 0) {
-            var reputationValue = BigDecimal.valueOf(reputation);
-            var operationsValue = BigDecimal.valueOf(numberOperations);
-            var result = reputationValue.divide(operationsValue, 2, RoundingMode.HALF_UP);
-            return result.toString();
-        }
-        return "No operations";
     }
 }
