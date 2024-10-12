@@ -33,32 +33,46 @@ public class TradingIntention extends EntityMetaData {
         ACTIVE, INACTIVE
     }
 
-    public Transaction doTransaction(CryptoUser requestUser) {
+    public Transaction createTransaction(CryptoUser requestUser) {
         if (status == Status.INACTIVE) throw new InactiveTradingIntentionException("The TradingIntention is Inactive");
         if (operationType == OperationType.CANCEL && !requestUser.equals(user)) {
             throw new IllegalCancelOperationException("Only the System or the owner of the TradingIntention can cancel it");
         }
         if (user.getId().equals(requestUser.getId())) throw new IllegalOperationException("Buyer and Seller user must be different");
-        if (operationType == OperationType.SYSTEM_CANCEL) {
-            return null;
+
+        var transactionStatus = Transaction.TransactionStatus.PENDING;
+
+        if (isAmountOutOfFivePercentRange()) {
+            status = Status.INACTIVE;
+            transactionStatus = Transaction.TransactionStatus.CANCELED;
         }
 
         var buyerUser = operationType == OperationType.PURCHASE ? user : requestUser;
         var sellerUser = operationType == OperationType.SALE ? user : requestUser;
 
-        var transaction = Transaction.builder()
-                .tradingIntention(this)
-                .amount(amount)
-                .price(price)
-                .buyer(buyerUser)
-                .seller(sellerUser)
-                .operationType(operationType)
-                .quantity(quantity)
-                .cryptoCurrency(cryptoCurrencyType)
-                .status(Transaction.TransactionStatus.PENDING)
-                .build();
+        if (!sellerUser.hasEnoughQuantity(this)) {
+            throw new IllegalOperationException("Seller does not have enough quantity to sell");
+        }
 
-        status = Status.INACTIVE;
-        return transaction;
+        return Transaction.builder()
+                 .tradingIntention(this)
+                 .amount(amount)
+                 .price(price)
+                 .buyer(buyerUser)
+                 .seller(sellerUser)
+                 .operationType(operationType)
+                 .quantity(quantity)
+                 .cryptoCurrency(cryptoCurrencyType)
+                 .status(transactionStatus)
+                 .build();
+    }
+
+    private boolean isAmountOutOfFivePercentRange() {
+        BigDecimal fivePercent = price.getPrice().multiply(new BigDecimal("0.05"));
+
+        BigDecimal lowerLimit = price.getPrice().subtract(fivePercent);
+        BigDecimal upperLimit = price.getPrice().add(fivePercent);
+
+        return amount.compareTo(lowerLimit) < 0 || amount.compareTo(upperLimit) > 0;
     }
 }

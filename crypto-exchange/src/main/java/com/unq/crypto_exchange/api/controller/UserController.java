@@ -3,6 +3,7 @@ package com.unq.crypto_exchange.api.controller;
 import com.unq.crypto_exchange.api.dto.RegisterUserDTO;
 import com.unq.crypto_exchange.api.dto.RegisterUserResponseDTO;
 import com.unq.crypto_exchange.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "Registers a user")
     @PostMapping("/register")
     public ResponseEntity<RegisterUserResponseDTO> register(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
         var user = userService.register(registerUserDTO.toModel());

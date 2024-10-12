@@ -1,7 +1,10 @@
 package com.unq.crypto_exchange.domain;
 
+import com.unq.crypto_exchange.domain.builder.CryptoActiveBuilder;
 import com.unq.crypto_exchange.domain.builder.CryptoUserBuilder;
 import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
+import com.unq.crypto_exchange.domain.builder.TransactionBuilder;
+import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 import com.unq.crypto_exchange.domain.entity.CryptoPrice;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
@@ -10,23 +13,39 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CryptoUserTest {
 
     @Test
-    public void whenMakeIntentionShouldAddTheIntentionToTheUser() {
-        var user = CryptoUserBuilder.defaultCryptoUser();
+    void whenMakeIntentionShouldAddTheIntentionToTheUser() {
+        var cryptoActive = CryptoActiveBuilder.aCryptoActive()
+                .withType(CryptoCurrencyType.AAVEUSDT)
+                .build();
+
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withCryptoActives(Set.of(cryptoActive)).build();
+
+        var tradingIntention = TradingIntentionBuilder.aTradingIntention()
+                .build();
+
         var cryptoPrice = Mockito.mock(CryptoPrice.class);
-        user.makeIntention(TradingIntentionBuilder.withDefaultData(), cryptoPrice);
+        user.makeIntention(tradingIntention, cryptoPrice);
         Assertions.assertEquals(1, user.getIntentions().size());
     }
 
     @Test
-    public void whenCancelIntentionShouldSetIntentionStatusToInactive() {
-        var user = CryptoUserBuilder.defaultCryptoUser();
+    void whenCancelIntentionShouldSetIntentionStatusToInactive() {
+        var cryptoActive = CryptoActiveBuilder.aCryptoActive()
+                .withType(CryptoCurrencyType.AAVEUSDT)
+                .build();
+
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withCryptoActives(Set.of(cryptoActive))
+                .build();
         var cryptoPrice = Mockito.mock(CryptoPrice.class);
-        var intention = Mockito.spy(TradingIntentionBuilder.withId(1L));
+        var intention = Mockito.spy(TradingIntentionBuilder.aTradingIntention().withId(1L).build());
         user.makeIntention(intention, cryptoPrice);
 
         user.cancelIntention(1L);
@@ -35,58 +54,118 @@ public class CryptoUserTest {
     }
 
     @Test
-    public void whenCancelNotExistentIntentionShouldThrowException() {
-        var user = CryptoUserBuilder.defaultCryptoUser();
+    void whenCancelNotExistentIntentionShouldThrowException() {
+        var user = CryptoUserBuilder.aCryptoUser().build();
 
         Assertions.assertThrows(NoSuchTradingIntentionException.class, () -> user.cancelIntention(1L));
 
     }
 
     @Test
-    public void whenDoTransactionAsBuyerShouldAddTransactionToBuyerAndSellerAndAddReputationToBoth() {
-        var buyer = CryptoUserBuilder.defaultCryptoUser();
-        var seller = CryptoUserBuilder.defaultCryptoUser();
-        var transaction = Mockito.mock(Transaction.class);
-        var intention = Mockito.mock(TradingIntention.class);
-
-        Mockito.when(transaction.getBuyer()).thenReturn(buyer);
-        Mockito.when(transaction.getSeller()).thenReturn(seller);
-        Mockito.when(transaction.getTradingIntention()).thenReturn(intention);
-        Mockito.when(intention.getCreatedAt()).thenReturn(Instant.MIN);
-
-        buyer.doTransaction(transaction);
-
-        Assertions.assertEquals(1, buyer.getBuyTransactions().size());
-        Assertions.assertEquals(1, seller.getSellTransactions().size());
-        Assertions.assertEquals(5,buyer.getReputation());
-        Assertions.assertEquals(5,seller.getReputation());
-    }
-
-    @Test
-    public void whenDoTransactionAsSellerShouldAddTransactionToBuyerAndSellerAndAddReputationToBoth() {
-        var buyer = CryptoUserBuilder.defaultCryptoUser();
-        var seller = CryptoUserBuilder.defaultCryptoUser();
-        var transaction = Mockito.mock(Transaction.class);
-        var intention = Mockito.mock(TradingIntention.class);
-
-        Mockito.when(transaction.getBuyer()).thenReturn(buyer);
-        Mockito.when(transaction.getSeller()).thenReturn(seller);
-        Mockito.when(transaction.getTradingIntention()).thenReturn(intention);
-        Mockito.when(intention.getCreatedAt()).thenReturn(Instant.MIN);
-
-        seller.doTransaction(transaction);
-
-        Assertions.assertEquals(1, buyer.getBuyTransactions().size());
-        Assertions.assertEquals(1, seller.getSellTransactions().size());
-        Assertions.assertEquals(5,buyer.getReputation());
-        Assertions.assertEquals(5,seller.getReputation());
-    }
-
-    @Test
-    public void whenDoCancelPenaltyUserShouldHave20lessReputation() {
-        var user = CryptoUserBuilder.defaultCryptoUser();
+    void whenDoCancelPenaltyUserShouldHave20lessReputation() {
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withPoints(100)
+                .build();
         user.doCancelPenalty();
-        Assertions.assertEquals(-20, user.getReputation());
+        Assertions.assertEquals(80, user.getPoints());
     }
 
+    @Test
+    void whenAddPointsShouldWorks() {
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withPoints(100)
+                .build();
+        user.addPoints(20);
+        Assertions.assertEquals(120, user.getPoints());
+    }
+
+    @Test
+    void whenAddBuyTransactionShouldWorks() {
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withBuyTransactions(HashSet.newHashSet(0))
+                .withSellTransactions(HashSet.newHashSet(0))
+                .build();
+
+        var transaction = Mockito.mock(Transaction.class);
+
+        user.addBuyTransaction(transaction);
+
+        Assertions.assertEquals(1, user.getBuyTransactions().size());
+        Assertions.assertEquals(0, user.getSellTransactions().size());
+    }
+
+    @Test
+    void whenAddSellTransactionShouldWorks() {
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withBuyTransactions(HashSet.newHashSet(0))
+                .withSellTransactions(HashSet.newHashSet(0))
+                .build();
+
+        var transaction = Mockito.mock(Transaction.class);
+
+        user.addSellTransaction(transaction);
+
+        Assertions.assertEquals(0, user.getBuyTransactions().size());
+        Assertions.assertEquals(1, user.getSellTransactions().size());
+    }
+
+    @Test
+    void whenAddQuantityShouldUpdateCryptoActive() {
+
+        var cryptoActive = CryptoActiveBuilder.aCryptoActive()
+                .withType(CryptoCurrencyType.AAVEUSDT)
+                .withQuantity(100L)
+                .build();
+
+        var cryptoUser = CryptoUserBuilder.aCryptoUser()
+                .withCryptoActives(Set.of(cryptoActive))
+                .build();
+
+
+        var transaction = Mockito.mock(Transaction.class);
+        Mockito.when(transaction.getCryptoCurrency()).thenReturn(CryptoCurrencyType.AAVEUSDT);
+        Mockito.when(transaction.getQuantity()).thenReturn(50L);
+
+        cryptoUser.addQuantity(transaction);
+
+        Assertions.assertEquals(150L, cryptoActive.getQuantity());
+    }
+
+    @Test
+    void whenRemoveQuantityShouldUpdateCryptoActive() {
+
+        var cryptoActive = CryptoActiveBuilder.aCryptoActive()
+                .withType(CryptoCurrencyType.AAVEUSDT)
+                .withQuantity(100L)
+                .build();
+
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withCryptoActives(Set.of(cryptoActive))
+                .build();
+
+
+        var transaction = Mockito.mock(Transaction.class);
+        Mockito.when(transaction.getCryptoCurrency()).thenReturn(CryptoCurrencyType.AAVEUSDT);
+        Mockito.when(transaction.getQuantity()).thenReturn(50L);
+
+        user.removeQuantity(transaction);
+
+        Assertions.assertEquals(50L, cryptoActive.getQuantity());
+    }
+
+    @Test
+    void whenAskNumberOperationsShouldReturnCorrectCount() {
+        var transaction = TransactionBuilder.aTransaction()
+                .withStatus(Transaction.TransactionStatus.COMPLETED)
+                .build();
+
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withBuyTransactions(new HashSet<>(Set.of(transaction)))
+                .withSellTransactions(new HashSet<>(Set.of(transaction)))
+                .build();
+
+        Long numberOfOperations = user.getNumberOperations();
+
+        Assertions.assertEquals(2L, numberOfOperations);
+    }
 }
