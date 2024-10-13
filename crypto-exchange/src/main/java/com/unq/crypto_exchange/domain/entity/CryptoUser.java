@@ -3,7 +3,6 @@ package com.unq.crypto_exchange.domain.entity;
 
 import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException;
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchCryptoCurrencyException;
-import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
@@ -13,7 +12,6 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -66,7 +64,7 @@ public class CryptoUser extends EntityMetaData {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CryptoActive> cryptoActives = new HashSet<>();
 
-    public TradingIntention makeIntention(TradingIntention intention, CryptoPrice cryptoPrice) {
+    public void makeIntention(TradingIntention intention, CryptoPrice cryptoPrice) {
 
         if (!hasEnoughQuantity(intention) && intention.getOperationType() == OperationType.SALE) {
             throw new IllegalOperationException("User does not have enough quantity to sell");
@@ -76,7 +74,6 @@ public class CryptoUser extends EntityMetaData {
         intention.setStatus(TradingIntention.Status.ACTIVE);
         intention.setPrice(cryptoPrice);
         intentions.add(intention);
-        return intention;
     }
 
     public boolean hasEnoughQuantity(TradingIntention intention){
@@ -87,39 +84,17 @@ public class CryptoUser extends EntityMetaData {
         return cryptoActive.getQuantity() >= intention.getQuantity();
     }
 
-    public TradingIntention cancelIntention(Long intentionId) {
-        var intention = intentions.stream()
-                .filter(i -> i.getId().equals(intentionId))
-                .findFirst().orElseThrow(() -> new NoSuchTradingIntentionException("There is no TradingIntention with ID: " + intentionId));
-        intention.setStatus(TradingIntention.Status.INACTIVE);
-        return intention;
-    }
-
-    public void addBuyTransaction(Transaction transaction) {
-        buyTransactions.add(transaction);
-        addQuantity(transaction);
-    }
-
-    public void addSellTransaction(Transaction transaction) {
-        sellTransactions.add(transaction);
-        removeQuantity(transaction);
-    }
-
     public void addQuantity(Transaction transaction) {
         if (cryptoActives.stream().anyMatch(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency()))) {
             var maybeCrypto = cryptoActives.stream().filter(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency())).findFirst();
-            maybeCrypto.ifPresent((crypto) -> {
-                crypto.addQuantity(transaction.getQuantity());
-            });
+            maybeCrypto.ifPresent(crypto -> crypto.addQuantity(transaction.getQuantity()));
         }
     }
 
     public void removeQuantity(Transaction transaction) {
         if (cryptoActives.stream().anyMatch(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency()))) {
             var maybeCrypto = cryptoActives.stream().filter(cryptoActive -> cryptoActive.getType().equals(transaction.getCryptoCurrency())).findFirst();
-            maybeCrypto.ifPresent((crypto) -> {
-                crypto.removeQuantity(transaction.getQuantity());
-            });
+            maybeCrypto.ifPresent(crypto -> crypto.removeQuantity(transaction.getQuantity()));
         }
     }
 
@@ -170,7 +145,7 @@ public class CryptoUser extends EntityMetaData {
                 .filter(crypto ->
                     hasBeenOperatedBetween(from, to, crypto, sellTransactions ) ||
                     hasBeenOperatedBetween(from, to, crypto, buyTransactions)
-                ).collect(Collectors.toList());
+                ).toList();
     }
 
     private boolean hasBeenOperatedBetween(Date from, Date to, CryptoActive crypto, Set<Transaction> transactions) {

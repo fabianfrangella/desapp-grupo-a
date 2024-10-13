@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-public class TransactionTest {
+class TransactionTest {
 
     @Test
     void whenTransactionIsCompletedShouldThrowException() {
