@@ -13,7 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class TradingIntentionTest {
+class TradingIntentionTest {
 
     @Test
     @DisplayName("When Do Transaction With Status Inactive Should Fail")

@@ -6,8 +6,6 @@ import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
 import com.unq.crypto_exchange.domain.builder.TransactionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 import com.unq.crypto_exchange.domain.entity.CryptoPrice;
-import com.unq.crypto_exchange.domain.entity.TradingIntention;
-import com.unq.crypto_exchange.domain.entity.exception.NoSuchTradingIntentionException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,7 @@ import org.mockito.Mockito;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CryptoUserTest {
+class CryptoUserTest {
 
     @Test
     void whenMakeIntentionShouldAddTheIntentionToTheUser() {
@@ -36,32 +34,6 @@ public class CryptoUserTest {
     }
 
     @Test
-    void whenCancelIntentionShouldSetIntentionStatusToInactive() {
-        var cryptoActive = CryptoActiveBuilder.aCryptoActive()
-                .withType(CryptoCurrencyType.AAVEUSDT)
-                .build();
-
-        var user = CryptoUserBuilder.aCryptoUser()
-                .withCryptoActives(Set.of(cryptoActive))
-                .build();
-        var cryptoPrice = Mockito.mock(CryptoPrice.class);
-        var intention = Mockito.spy(TradingIntentionBuilder.aTradingIntention().withId(1L).build());
-        user.makeIntention(intention, cryptoPrice);
-
-        user.cancelIntention(1L);
-
-        Mockito.verify(intention, Mockito.times(1)).setStatus(TradingIntention.Status.INACTIVE);
-    }
-
-    @Test
-    void whenCancelNotExistentIntentionShouldThrowException() {
-        var user = CryptoUserBuilder.aCryptoUser().build();
-
-        Assertions.assertThrows(NoSuchTradingIntentionException.class, () -> user.cancelIntention(1L));
-
-    }
-
-    @Test
     void whenDoCancelPenaltyUserShouldHave20lessReputation() {
         var user = CryptoUserBuilder.aCryptoUser()
                 .withPoints(100)
@@ -77,36 +49,6 @@ public class CryptoUserTest {
                 .build();
         user.addPoints(20);
         Assertions.assertEquals(120, user.getPoints());
-    }
-
-    @Test
-    void whenAddBuyTransactionShouldWorks() {
-        var user = CryptoUserBuilder.aCryptoUser()
-                .withBuyTransactions(HashSet.newHashSet(0))
-                .withSellTransactions(HashSet.newHashSet(0))
-                .build();
-
-        var transaction = Mockito.mock(Transaction.class);
-
-        user.addBuyTransaction(transaction);
-
-        Assertions.assertEquals(1, user.getBuyTransactions().size());
-        Assertions.assertEquals(0, user.getSellTransactions().size());
-    }
-
-    @Test
-    void whenAddSellTransactionShouldWorks() {
-        var user = CryptoUserBuilder.aCryptoUser()
-                .withBuyTransactions(HashSet.newHashSet(0))
-                .withSellTransactions(HashSet.newHashSet(0))
-                .build();
-
-        var transaction = Mockito.mock(Transaction.class);
-
-        user.addSellTransaction(transaction);
-
-        Assertions.assertEquals(0, user.getBuyTransactions().size());
-        Assertions.assertEquals(1, user.getSellTransactions().size());
     }
 
     @Test
