@@ -11,6 +11,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -109,5 +113,88 @@ class CryptoUserTest {
         Long numberOfOperations = user.getNumberOperations();
 
         Assertions.assertEquals(2L, numberOfOperations);
+    }
+
+    @Test
+    void whenFillInitialWalletShouldCreateCryptoActivesForAllTypes() {
+        var user = CryptoUserBuilder.aCryptoUser().build();
+
+        user.fillInitialWallet();
+
+        Assertions.assertEquals(CryptoCurrencyType.values().length, user.getCryptoActives().size());
+        user.getCryptoActives().forEach(cryptoActive ->
+                Assertions.assertEquals(0L, cryptoActive.getQuantity()));
+    }
+
+    @Test
+    void whenAskForReputationShouldReturnZeroIfNoOperations() {
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withPoints(100)
+                .build();
+
+        Assertions.assertEquals(BigDecimal.ZERO, user.getReputation());
+    }
+
+    @Test
+    void whenAskForReputationShouldCalculateCorrectly() {
+        var transaction = Mockito.mock(Transaction.class);
+        Mockito.when(transaction.getStatus()).thenReturn(Transaction.TransactionStatus.COMPLETED);
+
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withPoints(100)
+                .withBuyTransactions(Set.of(transaction))
+                .withSellTransactions(Set.of(transaction))
+                .build();
+
+        var expectedReputation = BigDecimal.valueOf(50.00).setScale(2, RoundingMode.HALF_UP); // 100 points / 2 operations
+        Assertions.assertEquals(expectedReputation, user.getReputation());
+    }
+
+    @Test
+    void whenFindCryptoActivesOperatedBetweenShouldReturnCorrectList() {
+        var cryptoActive = CryptoActiveBuilder.aCryptoActive()
+                .withType(CryptoCurrencyType.BTCUSDT)
+                .build();
+
+        var transaction = TransactionBuilder.aTransaction()
+                .withCreatedAt(Instant.now())
+                .withCryptoCurrency(CryptoCurrencyType.BTCUSDT)
+                .build();
+
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withCryptoActives(Set.of(cryptoActive))
+                .withBuyTransactions(Set.of(transaction))
+                .build();
+
+        Date from = Date.from(Instant.now().minusSeconds(3600));
+        Date to = Date.from(Instant.now().plusSeconds(3600));
+
+        var result = user.findCryptoActivesOperatedBetween(from, to);
+
+        Assertions.assertTrue(result.contains(cryptoActive));
+    }
+
+    @Test
+    void whenFindCryptoActivesOperatedBetweenShouldReturnEmptyIfNoMatches() {
+        var cryptoActive = CryptoActiveBuilder.aCryptoActive()
+                .withType(CryptoCurrencyType.ETHUSDT)
+                .build();
+
+        var transaction = TransactionBuilder.aTransaction()
+                .withCreatedAt(Instant.now())
+                .withCryptoCurrency(CryptoCurrencyType.BTCUSDT)
+                .build();
+
+        var user = CryptoUserBuilder.aCryptoUser()
+                .withCryptoActives(Set.of(cryptoActive))
+                .withBuyTransactions(Set.of(transaction))
+                .build();
+
+        Date from = Date.from(Instant.now().minusSeconds(3600));
+        Date to = Date.from(Instant.now().plusSeconds(3600));
+
+        var result = user.findCryptoActivesOperatedBetween(from, to);
+
+        Assertions.assertTrue(result.isEmpty());
     }
 }

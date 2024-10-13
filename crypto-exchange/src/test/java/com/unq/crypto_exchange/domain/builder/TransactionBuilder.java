@@ -9,6 +9,7 @@ import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction.TransactionStatus;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 public class TransactionBuilder {
 
@@ -21,6 +22,7 @@ public class TransactionBuilder {
     private OperationType operationType = OperationType.SALE;
     private TradingIntention tradingIntention;
     private TransactionStatus status = TransactionStatus.PENDING;
+    private Instant createdAt = Instant.now();
 
     public static TransactionBuilder aTransaction() {
         return new TransactionBuilder();
@@ -37,6 +39,7 @@ public class TransactionBuilder {
         transaction.setOperationType(operationType);
         transaction.setTradingIntention(tradingIntention);
         transaction.setStatus(status);
+        transaction.setCreatedAt(createdAt);
         return transaction;
     }
 
@@ -82,6 +85,11 @@ public class TransactionBuilder {
 
     public TransactionBuilder withStatus(final TransactionStatus status) {
         this.status = status;
+        return this;
+    }
+
+    public TransactionBuilder withCreatedAt(final Instant createdAt) {
+        this.createdAt = createdAt;
         return this;
     }
 }
