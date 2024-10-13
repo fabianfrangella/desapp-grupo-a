@@ -4,6 +4,7 @@ import com.unq.crypto_exchange.api.dto.RegisterUserDTO;
 import com.unq.crypto_exchange.api.dto.RegisterUserResponseDTO;
 import com.unq.crypto_exchange.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
+@Transactional
 @RequestMapping("/user")
 public class UserController {
 
