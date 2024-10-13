@@ -1,11 +1,8 @@
 package com.unq.crypto_exchange.domain;
 
 
-import com.unq.crypto_exchange.domain.builder.CryptoActiveBuilder;
 import com.unq.crypto_exchange.domain.builder.CryptoPriceBuilder;
-import com.unq.crypto_exchange.domain.builder.CryptoUserBuilder;
 import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
-import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.domain.entity.OperationType;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
@@ -19,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 class TradingIntentionTest {
 
