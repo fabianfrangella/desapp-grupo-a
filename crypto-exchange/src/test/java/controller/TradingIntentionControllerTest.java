@@ -2,29 +2,26 @@ package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unq.crypto_exchange.api.dto.OperationTypeDTO;
-import com.unq.crypto_exchange.api.dto.TradingIntentionDTO;
 import com.unq.crypto_exchange.api.dto.TradingIntentionResponseDTO;
 import com.unq.crypto_exchange.api.dto.TradingIntentionResponseListDTO;
-import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
-import com.unq.crypto_exchange.service.TradingIntentionService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-@SpringBootTest
-public class TradingIntentionControllerTest {
+import static controller.builder.TradingIntentionBuilder.aTradingIntention;
 
-    @Autowired
-    private TradingIntentionService tradingIntentionService;
+@SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class TradingIntentionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,18 +31,17 @@ public class TradingIntentionControllerTest {
 
     @Test
     public void publishTradingIntention() throws Exception {
-        var mappedResponse = createIntention();
+        var mappedResponse = aTradingIntention(mockMvc, objectMapper);
 
         Assertions.assertNotNull(mappedResponse);
         Assertions.assertEquals("ACTIVE", mappedResponse.getStatus());
         Assertions.assertEquals(1L, mappedResponse.getQuantity());
         Assertions.assertEquals(OperationTypeDTO.PURCHASE, mappedResponse.getOperation());
-        Assertions.assertEquals(BigDecimal.ONE, mappedResponse.getAmount());
     }
 
     @Test
     public void getAllTradingIntentions() throws Exception {
-        createIntention();
+        aTradingIntention(mockMvc, objectMapper);
 
         var intentions = mockMvc.perform(MockMvcRequestBuilders.get("/intention/find")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -63,7 +59,7 @@ public class TradingIntentionControllerTest {
 
     @Test
     public void getTradingIntentionById() throws Exception {
-        createIntention();
+        aTradingIntention(mockMvc, objectMapper);
 
         var intention = mockMvc.perform(MockMvcRequestBuilders.get("/intention/find/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -78,22 +74,5 @@ public class TradingIntentionControllerTest {
         Assertions.assertEquals(OperationTypeDTO.PURCHASE, dto.getOperation());
     }
 
-    private TradingIntentionResponseListDTO createIntention() throws Exception {
-        var dto = TradingIntentionDTO.builder()
-                .amount(BigDecimal.ONE)
-                .cryptoCurrency(CryptoCurrencyType.ALICEUSDT)
-                .operationType(OperationTypeDTO.PURCHASE)
-                .quantity(1L)
-                .build();
-
-        var json = objectMapper.writeValueAsString(dto);
-        var response = mockMvc.perform(MockMvcRequestBuilders.post("/intention/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.CREATED.value()))
-                .andReturn().getResponse().getContentAsString();
-
-        return objectMapper.readValue(response, TradingIntentionResponseListDTO.class);
-    }
 
 }

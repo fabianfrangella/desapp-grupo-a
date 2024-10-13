@@ -2,11 +2,15 @@ package com.unq.crypto_exchange.api.dto;
 
 import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TransactionResponseDTO {
 
     private CryptoCurrencyType cryptoCurrency;
