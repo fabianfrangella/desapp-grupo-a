@@ -12,6 +12,8 @@ import java.util.Objects;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TradingIntentionResponseListDTO {
 
     private CryptoCurrencyType cryptoCurrency;

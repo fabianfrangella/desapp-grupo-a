@@ -6,6 +6,7 @@ import com.unq.crypto_exchange.api.dto.TradingIntentionResponseListDTO;
 import com.unq.crypto_exchange.service.TradingIntentionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Transactional
 @RequestMapping("/intention")
 public class TradingIntentionController {
 

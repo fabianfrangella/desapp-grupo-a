@@ -5,6 +5,7 @@ import com.unq.crypto_exchange.api.dto.TransactionResponseDTO;
 import com.unq.crypto_exchange.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+@Transactional
 @RequestMapping("/transaction")
 public class TransactionController {
 

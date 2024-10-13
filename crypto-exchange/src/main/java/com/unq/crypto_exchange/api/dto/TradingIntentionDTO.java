@@ -2,15 +2,13 @@ package com.unq.crypto_exchange.api.dto;
 
 import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class TradingIntentionDTO {
@@ -19,7 +17,6 @@ public class TradingIntentionDTO {
     private Long quantity;
     private BigDecimal amount;
     private OperationTypeDTO operationType;
-
 
     public TradingIntention toModel() {
         return TradingIntention.builder()

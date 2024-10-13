@@ -4,8 +4,10 @@ import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.domain.entity.OperationType;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,6 +15,8 @@ import java.util.Objects;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TradingIntentionResponseDTO {
     private CryptoCurrencyType cryptoCurrency;
     private Long quantity;

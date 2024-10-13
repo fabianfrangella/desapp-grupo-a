@@ -2,6 +2,7 @@ package com.unq.crypto_exchange.api.controller;
 
 import com.unq.crypto_exchange.api.dto.OperatedCryptoDTO;
 import com.unq.crypto_exchange.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import java.util.Date;
 
 @AllArgsConstructor
 @RestController
+@Transactional
 @RequestMapping("/cryptoactive")
 public class CryptoActiveController {
 
