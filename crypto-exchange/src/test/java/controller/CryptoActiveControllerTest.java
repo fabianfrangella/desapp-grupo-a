@@ -32,6 +32,6 @@ class CryptoActiveControllerTest {
 
         var dto = objectMapper.readValue(response, OperatedCryptoDTO.class);
 
-        Assertions.assertEquals(dto.cryptos().size(), 0);
+        Assertions.assertEquals(0, dto.cryptos().size());
     }
 }
