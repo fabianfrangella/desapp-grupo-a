@@ -19,15 +19,3 @@ public record OperatedCryptoDTO(LocalDateTime dateTime,
         }
     }
 }
-
-/*
-Dia y hora de solicitud
-Valor total operado en dólares
-Valor total operado en pesos ARG
-Activos:
-Criptoactivo
-Cantidad nominal del Cripto Activo
-Cotización actual del Cripto Activo
-Monto de la cotización en pesos ARG
-
- */

@@ -13,9 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -39,7 +38,7 @@ public class UserService {
         return user;
     }
 
-    public OperatedCryptoDTO findOperatedCryptoBetween(Date from, Date to, Long userId) {
+    public OperatedCryptoDTO findOperatedCryptoBetween(LocalDate from, LocalDate to, Long userId) {
         var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
         var operatedCryptos = user.findCryptoActivesOperatedBetween(from, to);
         var cryptos = operatedCryptos.stream()

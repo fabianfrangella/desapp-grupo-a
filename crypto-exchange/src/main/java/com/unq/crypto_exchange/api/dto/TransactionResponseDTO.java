@@ -1,11 +1,14 @@
 package com.unq.crypto_exchange.api.dto;
 
 import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
+import com.unq.crypto_exchange.domain.entity.OperationType;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -19,6 +22,9 @@ public class TransactionResponseDTO {
     private String buyer;
     private String seller;
     private TransactionStatus status;
+    private String destinationAddress;
+    private BigDecimal userReputation;
+    private Long userOperations;
 
     public static TransactionResponseDTO fromModel(Transaction transaction) {
         return TransactionResponseDTO.builder()
@@ -32,6 +38,10 @@ public class TransactionResponseDTO {
                 .buyer(transaction.getBuyer().getLastName() + ", " + transaction.getBuyer().getName())
                 .seller(transaction.getSeller().getLastName() + ", " + transaction.getSeller().getName())
                 .status(TransactionStatus.fromModel(transaction.getStatus()))
+                .destinationAddress(transaction.getTradingIntention().getOperationType() == OperationType.SALE ?
+                        transaction.getSeller().getCvu() : transaction.getBuyer().getCryptoWalletAddress())
+                .userReputation(transaction.getTradingIntention().getUser().getReputation())
+                .userOperations(transaction.getTradingIntention().getUser().getNumberOperations())
                 .build();
     }
 

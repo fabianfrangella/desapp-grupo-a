@@ -15,6 +15,6 @@ public class CryptoPriceService {
     private final CryptoPriceRepository cryptoPriceRepository;
 
     public List<CryptoPrice> find() {
-        return cryptoPriceRepository.findAll();
+        return cryptoPriceRepository.findLatestCryptoPrices();
     }
 }

@@ -1,9 +1,10 @@
 package com.unq.crypto_exchange.domain.builder;
 
-import com.unq.crypto_exchange.domain.entity.CryptoUser;
-import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
-import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.CryptoActive;
+import com.unq.crypto_exchange.domain.entity.CryptoUser;
+import com.unq.crypto_exchange.domain.entity.TradingIntention;
+import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ public class CryptoUserBuilder {
     private String lastName = "Test last name";
     private String email = "email@test.com";
     private String password = "Password1#a";
-    private String cvu = "12345678901234567890";
+    private String cvu = "1111111111111111111111";
     private String cryptoWalletAddress = "12345678";
     private Integer points = 0;
     private Set<Transaction> buyTransactions = new HashSet<>();
