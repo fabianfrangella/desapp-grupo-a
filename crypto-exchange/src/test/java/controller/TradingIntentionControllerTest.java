@@ -21,7 +21,7 @@ import static controller.builder.TradingIntentionBuilder.aTradingIntention;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class TradingIntentionControllerTest {
+class TradingIntentionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -30,7 +30,7 @@ public class TradingIntentionControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void publishTradingIntention() throws Exception {
+    void publishTradingIntention() throws Exception {
         var mappedResponse = aTradingIntention(mockMvc, objectMapper);
 
         Assertions.assertNotNull(mappedResponse);
@@ -40,7 +40,7 @@ public class TradingIntentionControllerTest {
     }
 
     @Test
-    public void getAllTradingIntentions() throws Exception {
+    void getAllTradingIntentions() throws Exception {
         aTradingIntention(mockMvc, objectMapper);
 
         var intentions = mockMvc.perform(MockMvcRequestBuilders.get("/intention/find")
@@ -58,7 +58,7 @@ public class TradingIntentionControllerTest {
     }
 
     @Test
-    public void getTradingIntentionById() throws Exception {
+    void getTradingIntentionById() throws Exception {
         aTradingIntention(mockMvc, objectMapper);
 
         var intention = mockMvc.perform(MockMvcRequestBuilders.get("/intention/find/1")

@@ -1,7 +1,7 @@
 package com.unq.crypto_exchange.domain;
 
-import com.unq.crypto_exchange.domain.builder.TransactionBuilder;
 import com.unq.crypto_exchange.domain.builder.TradingIntentionBuilder;
+import com.unq.crypto_exchange.domain.builder.TransactionBuilder;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException;

@@ -1,9 +1,10 @@
 package com.unq.crypto_exchange.domain.builder;
 
-import com.unq.crypto_exchange.domain.entity.CryptoUser;
-import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
-import com.unq.crypto_exchange.domain.entity.TradingIntention;
 import com.unq.crypto_exchange.domain.entity.CryptoActive;
+import com.unq.crypto_exchange.domain.entity.CryptoUser;
+import com.unq.crypto_exchange.domain.entity.TradingIntention;
+import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
+
 import java.util.HashSet;
 import java.util.Set;
 

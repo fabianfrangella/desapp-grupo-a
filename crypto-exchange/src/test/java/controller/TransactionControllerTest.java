@@ -17,7 +17,7 @@ import static controller.builder.TradingIntentionBuilder.aTradingIntention;
 import static controller.builder.TransactionBuilder.aTransaction;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class TransactionControllerTest {
+class TransactionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -26,7 +26,7 @@ public class TransactionControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void createTransaction() throws Exception {
+    void createTransaction() throws Exception {
         aTradingIntention(mockMvc, objectMapper);
         var dto = aTransaction(mockMvc, objectMapper);
 
@@ -35,7 +35,7 @@ public class TransactionControllerTest {
     }
 
     @Test
-    public void confirmTransaction() throws Exception {
+    void confirmTransaction() throws Exception {
         aTradingIntention(mockMvc, objectMapper);
         aTransaction(mockMvc, objectMapper);
 
@@ -50,7 +50,7 @@ public class TransactionControllerTest {
     }
 
     @Test
-    public void cancelTransaction() throws Exception {
+    void cancelTransaction() throws Exception {
         aTradingIntention(mockMvc, objectMapper);
         aTransaction(mockMvc, objectMapper);
 
