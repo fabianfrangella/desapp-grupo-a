@@ -13,7 +13,7 @@ public class CryptoUserBuilder {
     private String lastName = "Test last name";
     private String email = "email@test.com";
     private String password = "Password1#a";
-    private String cvu = "12345678901234567890";
+    private String cvu = "1111111111111111111111";
     private String cryptoWalletAddress = "12345678";
     private Integer points = 0;
     private Set<Transaction> buyTransactions = new HashSet<>();

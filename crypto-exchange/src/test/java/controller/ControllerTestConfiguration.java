@@ -2,8 +2,10 @@ package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.unq.crypto_exchange.api.controller.CryptoActiveController;
 import com.unq.crypto_exchange.api.controller.TradingIntentionController;
 import com.unq.crypto_exchange.api.controller.TransactionController;
+import com.unq.crypto_exchange.api.controller.UserController;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,7 +24,13 @@ public class ControllerTestConfiguration {
     }
 
     @Bean
-    public MockMvc mockMvc(TransactionController transactionController, TradingIntentionController tradingIntentionController) {
-        return MockMvcBuilders.standaloneSetup(transactionController, tradingIntentionController).build();
+    public MockMvc mockMvc(TransactionController transactionController,
+                           TradingIntentionController tradingIntentionController,
+                           CryptoActiveController cryptoActiveController,
+                           UserController userController) {
+        return MockMvcBuilders.standaloneSetup(transactionController,
+                tradingIntentionController,
+                cryptoActiveController,
+                userController).build();
     }
 }
