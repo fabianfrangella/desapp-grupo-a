@@ -4,13 +4,18 @@ package com.unq.crypto_exchange.domain.entity;
 import com.unq.crypto_exchange.domain.entity.exception.IllegalOperationException;
 import com.unq.crypto_exchange.domain.entity.exception.NoSuchCryptoCurrencyException;
 import com.unq.crypto_exchange.domain.entity.transaction.Transaction;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @Getter
@@ -140,7 +145,7 @@ public class CryptoUser extends EntityMetaData {
                 .size();
     }
 
-    public List<CryptoActive> findCryptoActivesOperatedBetween(Date from, Date to) {
+    public List<CryptoActive> findCryptoActivesOperatedBetween(LocalDate from, LocalDate to) {
         return cryptoActives.stream()
                 .filter(crypto ->
                     hasBeenOperatedBetween(from, to, crypto, sellTransactions ) ||
@@ -148,13 +153,13 @@ public class CryptoUser extends EntityMetaData {
                 ).toList();
     }
 
-    private boolean hasBeenOperatedBetween(Date from, Date to, CryptoActive crypto, Set<Transaction> transactions) {
+    private boolean hasBeenOperatedBetween(LocalDate from, LocalDate to, CryptoActive crypto, Set<Transaction> transactions) {
         return transactions.stream()
                 .anyMatch(transaction -> transaction.getCryptoCurrency() == crypto.getType()
-                        && isBetween(from, to, Date.from(transaction.getCreatedAt())));
+                        && isBetween(from, to, LocalDate.ofInstant(transaction.getCreatedAt(), ZoneId.systemDefault())));
     }
 
-    private boolean isBetween(Date from, Date to, Date date) {
-        return date.after(from) && date.before(to);
+    private boolean isBetween(LocalDate from, LocalDate to, LocalDate date) {
+        return date.isEqual(from) ||  date.isEqual(to)|| (date.isAfter(from) && date.isBefore(to));
     }
 }

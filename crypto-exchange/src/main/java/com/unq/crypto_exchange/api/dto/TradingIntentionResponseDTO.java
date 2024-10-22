@@ -29,6 +29,7 @@ public class TradingIntentionResponseDTO {
     private String confirmAction;
     private String cancelAction;
     private OperationTypeDTO operation;
+    private TradingIntention.Status status;
     private Long id;
 
     public static TradingIntentionResponseDTO fromModel(TradingIntention tradingIntention) {
@@ -51,6 +52,7 @@ public class TradingIntentionResponseDTO {
                 .cancelAction("Cancel")
                 .operation(OperationTypeDTO.fromModel(tradingIntention.getOperationType()))
                 .id(tradingIntention.getId())
+                .status(tradingIntention.getStatus())
                 .build();
     }
 }
