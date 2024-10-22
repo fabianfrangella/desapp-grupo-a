@@ -14,6 +14,9 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -166,8 +169,8 @@ class CryptoUserTest {
                 .withBuyTransactions(Set.of(transaction))
                 .build();
 
-        Date from = Date.from(Instant.now().minusSeconds(3600));
-        Date to = Date.from(Instant.now().plusSeconds(3600));
+        LocalDate from = LocalDate.now().minusDays(1);
+        LocalDate to = LocalDate.now().plusDays(1);
 
         var result = user.findCryptoActivesOperatedBetween(from, to);
 
@@ -190,8 +193,8 @@ class CryptoUserTest {
                 .withBuyTransactions(Set.of(transaction))
                 .build();
 
-        Date from = Date.from(Instant.now().minusSeconds(3600));
-        Date to = Date.from(Instant.now().plusSeconds(3600));
+        LocalDate from = LocalDate.now().minusDays(1);
+        LocalDate to = LocalDate.now().plusDays(1);
 
         var result = user.findCryptoActivesOperatedBetween(from, to);
 
