@@ -4,7 +4,6 @@ import com.unq.crypto_exchange.api.dto.OperatedCryptoDTO;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.repository.CryptoPriceRepository;
 import com.unq.crypto_exchange.repository.UserRepository;
-import com.unq.crypto_exchange.security.PasswordEncoderFactory;
 import com.unq.crypto_exchange.service.exception.UserAlreadyExistException;
 import com.unq.crypto_exchange.service.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
@@ -47,7 +46,7 @@ public class UserService {
         var cryptos = operatedCryptos.stream()
                 .map(crypto -> OperatedCryptoDTO.CryptoActiveDTO.fromModel(crypto,
                         cryptoPriceRepository.findFirstByCryptoCurrencyTypeOrderByTimeDesc(crypto.getType()).get()))
-                .collect(Collectors.toList());
+                .toList();
         return new OperatedCryptoDTO(LocalDateTime.now(), BigDecimal.ZERO, BigDecimal.ZERO, cryptos);
     }
 }

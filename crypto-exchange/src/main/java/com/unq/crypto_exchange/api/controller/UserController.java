@@ -4,7 +4,6 @@ import com.unq.crypto_exchange.api.dto.LoginResponseDto;
 import com.unq.crypto_exchange.api.dto.LoginUserDto;
 import com.unq.crypto_exchange.api.dto.RegisterUserDTO;
 import com.unq.crypto_exchange.api.dto.RegisterUserResponseDTO;
-import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.service.AuthenticationService;
 import com.unq.crypto_exchange.service.JwtService;
 import com.unq.crypto_exchange.service.UserService;
