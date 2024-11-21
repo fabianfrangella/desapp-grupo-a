@@ -11,6 +11,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,7 +26,7 @@ import java.util.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class CryptoUser extends EntityMetaData {
+public class CryptoUser extends EntityMetaData implements UserDetails {
     @NonNull
     @Size(min = 3, max = 30)
     private String name;
@@ -161,5 +163,35 @@ public class CryptoUser extends EntityMetaData {
 
     private boolean isBetween(LocalDate from, LocalDate to, LocalDate date) {
         return date.isEqual(from) ||  date.isEqual(to)|| (date.isAfter(from) && date.isBefore(to));
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }
