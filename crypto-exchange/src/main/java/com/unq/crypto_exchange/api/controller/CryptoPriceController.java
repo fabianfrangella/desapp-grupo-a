@@ -26,7 +26,7 @@ public class CryptoPriceController {
     public ResponseEntity<List<CryptoPriceDTO>> find() {
         return new ResponseEntity<>(
                 CryptoPriceDTO.fromModel(
-                        cryptoPriceService.find()),
+                        cryptoPriceService.findLast()),
                 HttpStatus.OK
         );
     }
