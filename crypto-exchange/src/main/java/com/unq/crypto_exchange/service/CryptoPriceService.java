@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
@@ -57,7 +58,7 @@ public class CryptoPriceService {
 
 
     private void updateCache(List<CryptoPrice> prices) {
-        redisTemplate.opsForValue().set(CACHE_KEY, prices);
+        redisTemplate.opsForValue().set(CACHE_KEY, prices, 600, TimeUnit.SECONDS);
     }
 
     private void updateDatabase(List<CryptoPrice> prices) {
