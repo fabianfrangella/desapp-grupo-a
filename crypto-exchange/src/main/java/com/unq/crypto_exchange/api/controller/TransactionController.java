@@ -24,10 +24,10 @@ public class TransactionController {
 
     @Operation(summary = "Creates a end-to-end of the transaction")
     @PostMapping("/intention/{intentionId}/user/{userId}")
-    public TransactionResponseDTO requestP2P(
+    public ResponseEntity<TransactionResponseDTO> requestP2P(
             @Parameter(description = "The trading intention id that will be processed", required = true) @PathVariable("intentionId") Long intentionId,
             @Parameter(description = "The user id who wants to operate", required = true) @PathVariable("userId") Long userId) {
-        return TransactionResponseDTO.fromModel(transactionService.createTransaction(intentionId, userId));
+        return ResponseEntity.ok(TransactionResponseDTO.fromModel(transactionService.createTransaction(intentionId, userId)));
     }
 
     @Operation(summary = "Confirms the transaction")
@@ -42,8 +42,8 @@ public class TransactionController {
 
     @Operation(summary = "Cancels the transaction")
     @PostMapping("/cancel/{transactionId}")
-    public TransactionResponseDTO cancelTransaction(
+    public ResponseEntity<TransactionResponseDTO> cancelTransaction(
             @Parameter(description = "The transaction id that will be canceled", required = true) @PathVariable("transactionId") Long intentionId) {
-        return TransactionResponseDTO.fromModel(transactionService.processTransaction(intentionId, TransactionAction.CANCEL));
+        return ResponseEntity.ok(TransactionResponseDTO.fromModel(transactionService.processTransaction(intentionId, TransactionAction.CANCEL)));
     }
 }
