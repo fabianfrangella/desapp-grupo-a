@@ -30,20 +30,20 @@ public class CryptoPriceService {
         return cryptoPriceRepository.findLatestCryptoPrices();
     }
 
-    @Cacheable(value = "daily")
+    @Cacheable(value = "prices")
     public List<CryptoPrice> findLast() {
         List<CryptoPrice> freshPrices = binanceExternalService
                 .getPrices(Arrays.asList(CryptoCurrencyType.values()))
                 .stream()
                 .map(BinancePriceResponse::toModel)
-                .toList();
+                .collect(Collectors.toList());
 
         updateDatabase(freshPrices);
 
         return freshPrices;
     }
 
-    @Cacheable(value = "daily", key = "#cryptoCurrencyType")
+    @Cacheable(value = "price", key = "#cryptoCurrencyType")
     public List<CryptoPriceDTO> getConsolidatedPrices(CryptoCurrencyType cryptoCurrencyType) {
         List<CryptoPrice> prices = cryptoPriceRepository.findAllPricesFromLast24HoursByType(cryptoCurrencyType, LocalDateTime.now().minusHours(24));
 
@@ -57,7 +57,7 @@ public class CryptoPriceService {
                         .price(entry.getValue().getLast().getPrice())
                         .build())
                 .sorted(Comparator.comparing(CryptoPriceDTO::getTime))
-                .toList();
+                .collect(Collectors.toList());
 
     }
 
