@@ -55,10 +55,9 @@ public class UserService {
         var cryptos = operatedCryptos.stream()
                 .map(crypto -> {
                     var price = cryptoPriceRepository.findFirstByCryptoCurrencyTypeOrderByTimeDesc(crypto.getType()).get();
-                    var arsTotalValue = BigDecimal.valueOf(crypto.getQuantity())
-                            .multiply(price.getPrice())
-                            .divide(cryptoDollarPrice, RoundingMode.FLOOR);
-                    return OperatedCryptoDTO.CryptoActiveDTO.fromModel(crypto, price, arsTotalValue);
+                    var arsValue = price.getPrice()
+                            .multiply(cryptoDollarPrice);
+                    return OperatedCryptoDTO.CryptoActiveDTO.fromModel(crypto, price, arsValue);
                 })
                 .toList();
 
