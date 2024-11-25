@@ -1,9 +1,6 @@
 package com.unq.crypto_exchange.api.controller;
 
-import com.unq.crypto_exchange.api.dto.LoginResponseDto;
-import com.unq.crypto_exchange.api.dto.LoginUserDto;
-import com.unq.crypto_exchange.api.dto.RegisterUserDTO;
-import com.unq.crypto_exchange.api.dto.RegisterUserResponseDTO;
+import com.unq.crypto_exchange.api.dto.*;
 import com.unq.crypto_exchange.service.AuthenticationService;
 import com.unq.crypto_exchange.service.JwtService;
 import com.unq.crypto_exchange.service.UserService;
@@ -13,10 +10,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -43,5 +39,10 @@ public class UserController {
         var jwtToken = jwtService.generateToken(authenticatedUser);
         var loginResponse = new LoginResponseDto(jwtToken, jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<UserResponseDto>> listAllUsers() {
+        return ResponseEntity.ok(userService.findAll().stream().map(UserResponseDto::fromModel).toList());
     }
 }

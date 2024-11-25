@@ -1,6 +1,7 @@
 package com.unq.crypto_exchange.service;
 
 import com.unq.crypto_exchange.api.dto.OperatedCryptoDTO;
+import com.unq.crypto_exchange.api.dto.UserResponseDto;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.external.service.DolarapiExternalService;
 import com.unq.crypto_exchange.repository.CryptoPriceRepository;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -30,6 +32,9 @@ public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
+    public List<CryptoUser> findAll() {
+        return userRepository.findAll();
+    }
     public CryptoUser register(CryptoUser user) {
         var maybeUser = userRepository.findByEmail(user.getEmail());
         maybeUser.ifPresent(existentUser -> {
@@ -62,7 +67,7 @@ public class UserService {
                         .map(crypto -> crypto.price().getPrice().multiply(BigDecimal.valueOf(crypto.quantity())))
                         .reduce(BigDecimal.ZERO, (a, b) -> b.plus()),
                 cryptos.stream()
-                        .map(OperatedCryptoDTO.CryptoActiveDTO::arsValue)
+                        .map(crypto -> crypto.arsValue().multiply(BigDecimal.valueOf(crypto.quantity())))
                         .reduce(BigDecimal.ZERO, (a, b) -> b.plus()),
                 cryptos);
     }

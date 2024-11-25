@@ -22,7 +22,7 @@ public class CacheConfig {
             configurer.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         });
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(1))
+                .entryTtl(Duration.ofMinutes(10))
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
     }
