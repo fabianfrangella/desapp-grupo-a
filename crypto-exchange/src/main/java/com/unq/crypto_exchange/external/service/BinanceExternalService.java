@@ -3,6 +3,7 @@ package com.unq.crypto_exchange.external.service;
 import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
 import com.unq.crypto_exchange.external.dto.BinancePriceResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
