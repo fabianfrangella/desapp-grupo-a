@@ -3,9 +3,9 @@ package com.unq.crypto_exchange.service;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @AllArgsConstructor
 public class DataInitializer {
 
