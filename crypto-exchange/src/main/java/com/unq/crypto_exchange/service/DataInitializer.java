@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class DataInitializer {
 
     private final UserService userService;
+    private final CryptoPriceService cryptoPriceService;
 
     @PostConstruct
     public void initialize() {
@@ -30,5 +31,6 @@ public class DataInitializer {
                 .lastName("Mora")
                 .cvu("1234567891123456789113")
                 .build());
+        cryptoPriceService.findLast();
     }
 }

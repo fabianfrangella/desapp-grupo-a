@@ -117,7 +117,7 @@ public class CryptoUser extends EntityMetaData implements UserDetails {
         Arrays.stream(CryptoCurrencyType.values()).forEach(type -> {
             var cryptoActive = new CryptoActive();
             cryptoActive.setUser(this);
-            cryptoActive.setQuantity(0L);
+            cryptoActive.setQuantity(1L);
             cryptoActive.setType(type);
 
             cryptoActives.add(cryptoActive);

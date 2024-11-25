@@ -12,7 +12,7 @@ public class DolarapiExternalService {
 
     private final WebClient dolarapiWebClient;
 
-    public CryptoDolarResponse getCriptoDollar() {
+    public CryptoDolarResponse getCryptoDollar() {
         try {
             return dolarapiWebClient.get()
                     .uri("/v1/dolares/cripto")
