@@ -1,7 +1,6 @@
 package com.unq.crypto_exchange.service;
 
 import com.unq.crypto_exchange.api.dto.OperatedCryptoDTO;
-import com.unq.crypto_exchange.api.dto.UserResponseDto;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
 import com.unq.crypto_exchange.external.service.DolarapiExternalService;
 import com.unq.crypto_exchange.repository.CryptoPriceRepository;
@@ -15,11 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service

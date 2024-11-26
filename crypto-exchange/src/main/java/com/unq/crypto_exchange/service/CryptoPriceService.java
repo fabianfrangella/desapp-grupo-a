@@ -24,11 +24,6 @@ import java.util.stream.Collectors;
 public class CryptoPriceService {
     private final CryptoPriceRepository cryptoPriceRepository;
     private final BinanceExternalService binanceExternalService;
-    private static final String CACHE_KEY = "cryptoPrices";
-
-    public List<CryptoPrice> find() {
-        return cryptoPriceRepository.findLatestCryptoPrices();
-    }
 
     @Cacheable(value = "prices")
     public List<CryptoPrice> findLast() {

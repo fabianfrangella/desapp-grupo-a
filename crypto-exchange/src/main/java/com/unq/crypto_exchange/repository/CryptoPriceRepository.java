@@ -16,13 +16,6 @@ public interface CryptoPriceRepository extends JpaRepository<CryptoPrice, Long> 
     Optional<CryptoPrice> findFirstByCryptoCurrencyTypeOrderByTimeDesc(CryptoCurrencyType cryptoCurrencyType);
 
     @Query("""
-            FROM CryptoPrice cp
-            WHERE cp.time = (SELECT max(time) from CryptoPrice WHERE cryptoCurrencyType = cp.cryptoCurrencyType)
-            ORDER BY cp.time DESC
-            """)
-    List<CryptoPrice> findLatestCryptoPrices();
-
-    @Query("""
         SELECT cp
         FROM CryptoPrice cp
         WHERE cp.time >= :startTime
