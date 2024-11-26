@@ -1,16 +1,23 @@
 package com.unq.crypto_exchange.service;
 
+import com.unq.crypto_exchange.domain.entity.CryptoCurrencyType;
+import com.unq.crypto_exchange.domain.entity.CryptoPrice;
 import com.unq.crypto_exchange.domain.entity.CryptoUser;
+import com.unq.crypto_exchange.repository.CryptoPriceRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Component
 @AllArgsConstructor
 public class DataInitializer {
 
     private final UserService userService;
-    private final CryptoPriceService cryptoPriceService;
+    private final CryptoPriceRepository cryptoPriceRepository;
 
     @PostConstruct
     public void initialize() {
@@ -31,6 +38,11 @@ public class DataInitializer {
                 .lastName("Mora")
                 .cvu("1234567891123456789113")
                 .build());
-        cryptoPriceService.findLast();
+
+        cryptoPriceRepository.saveAll(Arrays.stream(CryptoCurrencyType.values()).map(value -> CryptoPrice.builder()
+                .price(BigDecimal.TEN)
+                .time(LocalDateTime.now())
+                .cryptoCurrencyType(value)
+                .build()).toList());
     }
 }

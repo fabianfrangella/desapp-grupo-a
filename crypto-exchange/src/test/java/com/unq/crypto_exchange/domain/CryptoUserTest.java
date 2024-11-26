@@ -123,7 +123,7 @@ class CryptoUserTest {
 
         Assertions.assertEquals(CryptoCurrencyType.values().length, user.getCryptoActives().size());
         user.getCryptoActives().forEach(cryptoActive ->
-                Assertions.assertEquals(0L, cryptoActive.getQuantity()));
+                Assertions.assertEquals(1L, cryptoActive.getQuantity()));
     }
 
     @Test
@@ -158,6 +158,7 @@ class CryptoUserTest {
 
         var transaction = TransactionBuilder.aTransaction()
                 .withCreatedAt(Instant.now())
+                .withStatus(Transaction.TransactionStatus.COMPLETED)
                 .withCryptoCurrency(CryptoCurrencyType.BTCUSDT)
                 .build();
 
