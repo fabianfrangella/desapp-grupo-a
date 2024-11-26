@@ -6,6 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -15,7 +16,8 @@ import java.time.Instant;
 @Component
 public class LoggingAspect {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Around("execution(* com.unq.crypto_exchange.api.controller..*(..))")
     public Object logControllerMethods(ProceedingJoinPoint joinPoint) throws Throwable {

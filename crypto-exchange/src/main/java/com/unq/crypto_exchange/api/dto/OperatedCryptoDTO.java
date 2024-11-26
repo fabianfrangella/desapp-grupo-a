@@ -14,8 +14,8 @@ public record OperatedCryptoDTO(LocalDateTime dateTime,
                                 List<CryptoActiveDTO> cryptos) {
 
     public record CryptoActiveDTO(CryptoCurrencyType crypto, Long quantity, CryptoPriceDTO price, BigDecimal arsValue) {
-        public static CryptoActiveDTO fromModel(CryptoActive cryptoActive, CryptoPrice price) {
-            return new CryptoActiveDTO(cryptoActive.getType(), cryptoActive.getQuantity(), CryptoPriceDTO.fromModel(price), BigDecimal.ZERO);
+        public static CryptoActiveDTO fromModel(CryptoActive cryptoActive, CryptoPrice price, BigDecimal arsValue) {
+            return new CryptoActiveDTO(cryptoActive.getType(), cryptoActive.getQuantity(), CryptoPriceDTO.fromModel(price), arsValue);
         }
     }
 }
